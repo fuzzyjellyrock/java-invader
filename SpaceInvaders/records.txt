@@ -1,0 +1,6 @@
+Juan,3070,4
+Santiago,2320,3
+SJV,2310,3
+Santiago,1520,2
+luis,170,1
+paco,100,1
