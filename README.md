@@ -1,2 +1,2 @@
-# java-invader
-Space Invader hecho en Java.
+# java-invaders
+Space Invaders hecho en Java.
