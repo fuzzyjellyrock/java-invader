@@ -5,7 +5,7 @@
  */
 package Views;
 
-import Controller.BarrierController;
+
 import Controller.ControllerGroupOfInvaders;
 import Controller.ControllerTank;
 import java.awt.Color;
@@ -27,7 +27,6 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
      */
     private ControllerGroupOfInvaders invasores;//invasores
     private ControllerTank tanque; //tanque
-    private BarrierController barrier;  //barrera de muros  
     private PlayerStatusBar consumiblesTanque; //barrera encargada de mostrar los consumibles
     private ViewGame viewGame;  //forma de controlar el jframe
    
@@ -86,11 +85,6 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
         //tanque
         tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 15,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(3, 4, 18, 10, 600);
-        //muros
-        barrier = new BarrierController(/*cantidad de muros:*/3, /*espacio entre muros:*/100);
-        barrier.addGroupOfWalls(/*xInicial:*/85, /*yInicial:*/370, /*columnas:*/4,/*filas:*/ 4, /*ancho:*/20, /*alto:*/20);
-     
-
     }
     /**
      * crea un nivel basico a partir de los parametros de los personajes
@@ -104,9 +98,6 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
         //tanque
         tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(/*Vidas del tanque*/4,/*super disparos del tanque*/ 4, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
-        //muros
-        barrier = new BarrierController(/*cantidad de muros:*/3, /*espacio entre muros:*/100);
-        barrier.addGroupOfWalls(/*xInicial:*/85, /*yInicial:*/370, /*columnas:*/4,/*filas:*/ 4, /*ancho:*/20, /*alto:*/20);
     }
     /**
      * crea un nivel gefe (boss) a partir de los parametros de los personajes
@@ -120,9 +111,6 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
         //tanque
         tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(/*Vidas del tanque*/5,/*super disparos del tanque*/ 9, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
-        //muros
-        barrier = new BarrierController(/*cantidad de muros:*/3, /*espacio entre muros:*/100);
-        barrier.addGroupOfWalls(/*xInicial:*/85, /*yInicial:*/370, /*columnas:*/4,/*filas:*/ 4, /*ancho:*/20, /*alto:*/20);
     }
 
 //------------------Methods-------------------------------------------
@@ -133,7 +121,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
         int disparo = -1;
         while (disparo == -1) {//mientras el disparo pueda seguir sin problemas
             
-            disparo = tanque.shoot(invasores.getGroupInvader(), barrier.getBarrier().getBarrier());
+            disparo = tanque.shoot(invasores.getGroupInvader());
            
              if (disparo == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
                  visual[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
@@ -165,7 +153,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
                 consumiblesTanque.repaint();//eliminalo del la barra de consumibles
             tanque.getTank().createOrDestroySuperShoot(1);//genera la forma de la bala
              while (disparo != 2) {//mientras el disparo pueda seguir sin problemas
-                 disparo = tanque.SuperShoot(invasores.getGroupInvader(), barrier.getBarrier().getBarrier());//mueve el disparo
+                 disparo = tanque.SuperShoot(invasores.getGroupInvader());//mueve el disparo
                 
                      if (disparo == 0) {
                 viewGame.getUser().addPoints(10);
@@ -191,20 +179,16 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
      */
     public void moveInvaders() {
         while (invasores.moveGroupDown()) {
-             invasores.detectionWall(barrier.getBarrier().getBarrier());
             repaint();
 //--------------------------------------------------------
             while (invasores.moveGroupRight()) {
-                invasores.detectionWall(barrier.getBarrier().getBarrier());
                 repaint();    
             }
 //--------------------------------------------------------            
             invasores.moveGroupDown();
-            invasores.detectionWall(barrier.getBarrier().getBarrier());
             repaint();
 //--------------------------------------------------------
             while (invasores.moveGroupLeft()) {
-                invasores.detectionWall(barrier.getBarrier().getBarrier());
                 repaint();
             }
         }
@@ -222,7 +206,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
             int aux = 0;//determina el camino del disparo
             int auxLvl=viewGame.getIncrementLvl();//determina si el tanque si ya paso de nivel, si es asi detiene la bala del invasor
             while (aux == 0) {//mientras el disparo no colisione
-                aux = invasores.shootInvader(possibility, tanque.getTank(), barrier.getBarrier().getBarrier());//mueve la bala
+                aux = invasores.shootInvader(possibility, tanque.getTank());//mueve la bala
                 repaint(); 
                 if (auxLvl!=viewGame.getIncrementLvl() && invasores.getGroupInvader().searchAlive()==0) {//para la bala de el invasor al terminar el nivel
                     break;
@@ -315,20 +299,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
     public void setTanque(ControllerTank tanque) {
         this.tanque = tanque;
     }
-    /**
-     * retorna las barreras del objeto
-     * @retdurn BarrierController(barrier)
-     */
-    public BarrierController getBarrier() {
-        return barrier;
-    }
-    /**
-     * destian la barrera del objeto
-     * @param barrier (BarrierController)
-     */
-    public void setBarrier(BarrierController barrier) {
-        this.barrier = barrier;
-    }
+   
     /**
      * destina la operacion que ejecuta el hilo
      * @param operation operacion desceada
@@ -384,20 +355,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
             imgComplete.fill(tankShoot);
             }
 
-        }
-          //----------------ver Muros-------------------------------
-        if(visual[4] == true) {
-            for(int i = 0; i < barrier.getBarrier().getSize(); i++){
-                int tamaño = barrier.getBarrier().getBarrier().get(i).getGroupWallSize();
-                for(int j = 0; j < tamaño; j++){
-                      Rectangle2D wall = barrier.getWallAlive(i, j);
-                    if (wall!=null) {//solo los muros que existen
-                         imgComplete.fill(wall);
-                    }
-                   
-                }
-            }
-        }
+        }     
     }
 
      /**

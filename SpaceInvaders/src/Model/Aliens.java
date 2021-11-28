@@ -92,38 +92,7 @@ public class Aliens extends Position {
         }
     }
     
-    //detección con los muros
-    /**
-     * detecta si alguna de las formas del invasor choca con un los grupos de muros
-     * @param walls grupo de muros a los que se puede chocar el invasor 
-      * @return <b>true </b> si tiene colision la nave con algun muro
-     *     <br></b>false</b> si la nave no tiene colisión
-     */
-    public boolean wallMoveDetection(ArrayList<GroupOfWalls> walls){
-            for(int i = 0; i < getShape().size();i++){
-                for (int j = 0; j <walls.size(); j++) {
-                           if( walls.get(j).colisiones(getShape().get(i),true)>= 0 ){//detecta si un disparo le dio a un determinado grupo de muros(groupOfWall)
-                return true;
-            }
-          }
-        } 
-        return false;
-       
-    }
-    /**
-     * detecta si el disparo le dio a una parte de un grupo de muros
-     * @param walls grupo de muros a los que las balas les puede afectar
-      * @return <b>True</b> si choco con algun muro
-      *     <br></b>false</b> si no choca con ningun muro
-     */
-    public boolean wallShootDetection(ArrayList<GroupOfWalls> walls) {
-        for(int i = 0; i < walls.size();i++){
-            if( walls.get(i).colisiones(shoot.getShape().get(0),true)>= 0 ){//detecta si un disparo le dio a un determinado grupo de muros(groupOfWall)
-                return true;
-            }
-        } 
-        return false;
-    }
+    
     
     /**
      * Dispara al tanque enemigo moviendo la bala un paso para abajo dependiendo su velocidad y fps, una vez ya en el aire detecta si choco o con el límite, o con el tanque.
@@ -138,7 +107,7 @@ public class Aliens extends Position {
      *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
      * @see Invader/removeOrMoveShoot()
      */
-    public int shoot(Tank enemy, ArrayList<GroupOfWalls> walls) {
+    public int shoot(Tank enemy) {
         /*
         retorna 0 si el el diparo va normal}
         retorna 1 cuando regresa el disparo al invasor normal
@@ -152,11 +121,7 @@ public class Aliens extends Position {
                  removeOrMoveShoot();//elimina el invasor si la bala no sigue, pero si bala sigue eliminia al invader cuando la bala colisione
                 return 1;//le dio a tanque
             }
-            if (wallShootDetection(walls) == true) {//si detecta colisión con el tanque o si detecta colisión con un muro
-                 //System.out.println("Hubo colision con muro");
-                 removeOrMoveShoot();//elimina el invasor si la bala no sigue, pero si bala sigue eliminia al invader cuando la bala colisione
-                return 2;//le dio a muro
-            }
+           
             //_________________
             return 0;//si el disparo sigue normal
             

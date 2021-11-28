@@ -5,7 +5,6 @@
  */
 package Controller;
 
-import Model.GroupOfWalls;
 import Model.Tank;
 import Model.TankConsumable;
 import Model.Fleet;
@@ -64,8 +63,8 @@ public class ControllerTank {
      * dispara para arriba hasta detectar una colision
      * @param enemy grupo de enemigos a los cuales les afecta el disparo
      */
-    public int shoot(Fleet enemy, ArrayList<GroupOfWalls> walls){
-       return tank.shoot(enemy,walls);
+    public int shoot(Fleet enemy){
+       return tank.shoot(enemy);
     }
     /**
      * dispara una bala con menos velocidad y solo retorna si llega al limite 
@@ -76,8 +75,8 @@ public class ControllerTank {
      *         <br></b>1</b> si le dio a un muro
      *         <br></b>2</b> si llego al limite superiro(position/limitUp)
     */
-    public int SuperShoot(Fleet enemy,ArrayList<GroupOfWalls> walls){
-     return tank.SuperShoot(enemy, walls);
+    public int SuperShoot(Fleet enemy){
+     return tank.SuperShoot(enemy);
       }
     
     //------------------GetSetters----------------------------------------
