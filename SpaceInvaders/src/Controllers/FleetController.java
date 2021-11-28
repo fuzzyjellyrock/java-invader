@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controllers;
 
-import Model.Aliens;
-import Model.Tank;
-import Model.Fleet;
+import Models.Alien;
+import Models.Ship;
+import Models.Fleet;
 import java.util.ArrayList;
 
 /**
  * Controlador para el grupo de invasores
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class ControllerGroupOfInvaders {
+public class FleetController {
 
     private Fleet groupInvader;
 
@@ -22,7 +22,7 @@ public class ControllerGroupOfInvaders {
     /**
      * constructor de GroupInvaders null
      */
-    public ControllerGroupOfInvaders() {
+    public FleetController() {
         this.groupInvader = new Fleet();
     }
     /**
@@ -37,7 +37,7 @@ public class ControllerGroupOfInvaders {
      * @param speed velocidad del grupo
      * @param refreshRateInvaders fps del grupo
      */
-    public ControllerGroupOfInvaders(int xInicial, int yInicial, int row, int column, int speed, int refreshRateInvaders) {
+    public FleetController(int xInicial, int yInicial, int row, int column, int speed, int refreshRateInvaders) {
         this.groupInvader = new Fleet(xInicial, yInicial, row, column, speed, refreshRateInvaders);
     }
     //------------------Methods------------------------------------------  
@@ -105,7 +105,7 @@ public class ControllerGroupOfInvaders {
      *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
      * @see model.GroupOfInvaders/shoot()
      */
-    public int shootInvader(int invader, Tank tank) {
+    public int shootInvader(int invader, Ship tank) {
         return groupInvader.getInvaders().get(invader).shoot(tank);
     }
 
@@ -131,7 +131,7 @@ public class ControllerGroupOfInvaders {
      * @param invader idex a buscar
      * @return Invader (model/Invader) invasor el cual se busca
      */
-    public Aliens getInvader(int invader) {
+    public Alien getInvader(int invader) {
         return groupInvader.getInvaders().get(invader);
     }
     //-------------------Override-----------------------------------------

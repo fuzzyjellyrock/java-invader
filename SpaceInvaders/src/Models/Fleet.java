@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Fleet {
     private int groupSpeed;
     private long refreshRate;
 
-    private ArrayList<Aliens> invaders;
+    private ArrayList<Alien> invaders;
     //inicio del grupo de invasores
     private final int xInicial;
     private final int yInicial;
@@ -141,7 +141,7 @@ public class Fleet {
      * @param height  alto de la forma a agregar
      */
     public void addShapeInvaders(int x, int y, int width, int height){
-        for (Aliens invader : invaders) {
+        for (Alien invader : invaders) {
             invader.addShape(invader.getX()+x,//x
                             invader.getY()+y//y
                             , width,//ancho
@@ -162,7 +162,7 @@ public class Fleet {
      */
     public void addInvader(int x, int y, int width, int height, int speed, int speedBullet, long refreshShoot) {
         //creacion del invader junto con la bala y su velocidad
-        Aliens aux = new Aliens(x, y, width, height, speed, speedBullet, refreshShoot);
+        Alien aux = new Alien(x, y, width, height, speed, speedBullet, refreshShoot);
         //creacion de formas de los enemigos
         aux.addShape(x, y, width, height); //forma primario del rectangulo
         aux.addShape(x-((width/4)+1), y+(height), (width/4)+1, 7);
@@ -199,7 +199,7 @@ public class Fleet {
             
             try {Thread.sleep(getRefreshRate());} catch (Exception e) {}//---------fps 
             ////busca si es posible mover el grupo, verificando si alguna choca o no con el lado derecho (limitLeft)
-            for (Aliens invader : invaders) {
+            for (Alien invader : invaders) {
                 if (invader.verifyLimitLeft() == true) {
                     return false;
                 }
@@ -224,7 +224,7 @@ public class Fleet {
         if (invaders.size() >= 0 && searchAlive()!=0) {//solo se mueven si existe invasores
              try {Thread.sleep(getRefreshRate());} catch (Exception e) {System.out.println("error");}//---------fps
             //busca si es posible mover el grupo, verificando si alguna choca o no con el lado derecho(limitRight)
-             for (Aliens invader : invaders) {
+             for (Alien invader : invaders) {
                 if (invader.verifyLimitRight() == true) {
                     return false;
                 }
@@ -246,7 +246,7 @@ public class Fleet {
     public boolean moveGroupDown() {
          if (invaders.size() >= 0 && searchAlive()!=0) {//solo se mueven si existe invasores
             //ya que al bajar la nave el movimiento siepre sera uniforme hay que modificar la velocidad a una bajada de 10 cuadros ya que queremos que siempre al bajar sea un velocidad de 10
-               for (Aliens invader : invaders) {
+               for (Alien invader : invaders) {
                 if (invader.verifyLimitDown() == true) {
                     return false;
                 }
@@ -286,7 +286,7 @@ public class Fleet {
      */
     public int searchAlive(){
         int size=0;
-        for (Aliens invader : invaders) {//busca quien esta vivo
+        for (Alien invader : invaders) {//busca quien esta vivo
              if (invader.isDead()==false) {
                 size++;
             }
@@ -404,14 +404,14 @@ public class Fleet {
      * Obtener array de invasores del groupOfInvaders
      * @return ArrayList(invader)
      */
-    public ArrayList<Aliens> getInvaders() {
+    public ArrayList<Alien> getInvaders() {
         return invaders;
     }
     /**
      * Determina el arreglo de invasores del groupOfInvaders
      * @param invaders arreglo de invasores a destinar en el objeto
      */
-    public void setInvaders(ArrayList<Aliens> invaders) {
+    public void setInvaders(ArrayList<Alien> invaders) {
         this.invaders = invaders;
     }
     /**
@@ -433,7 +433,7 @@ public class Fleet {
      * @param index (int) idex del invasor a buscar
      * @return Shoot(disparo del invasor)
      */
-    public Shoot getShootOfInvader(int index){
+    public Bullet getShootOfInvader(int index){
         return invaders.get(index).getShoot();
     }
 

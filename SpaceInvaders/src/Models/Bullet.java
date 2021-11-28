@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 
 import java.awt.geom.Rectangle2D;
@@ -12,14 +12,14 @@ import java.awt.geom.Rectangle2D;
  * Bloque con los atributos y métodos de la clase Shoot (Disparo)
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Shoot extends Position {
+public class Bullet extends GameObject {
         
     private long refreshRate; 
  //-----------------Constructor----------------------------------------
     /**
      * constructor null de shoot
      */
-    public Shoot() {
+    public Bullet() {
     }
    /**
    * Crea un disparo agregando su posición y tamaño de una vez
@@ -29,7 +29,7 @@ public class Shoot extends Position {
    * @param high altura de el rectangulo el cual formara el shoot
    * @param width anchura de el rectangulo el cual formara el shoot
    */  
-    public Shoot( int x, int y, int width, int height, int speed, long refreshRate) {
+    public Bullet( int x, int y, int width, int height, int speed, long refreshRate) {
         super(x, y,speed);
         this.refreshRate = refreshRate;
         addShape(x, y, width, height);

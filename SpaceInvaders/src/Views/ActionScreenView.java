@@ -6,8 +6,8 @@
 package Views;
 
 
-import Controller.ControllerGroupOfInvaders;
-import Controller.ControllerTank;
+import Controllers.FleetController;
+import Controllers.ShipController;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,15 +20,15 @@ import javax.xml.transform.Source;
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
+public class ActionScreenView extends javax.swing.JPanel implements Runnable {
 
     /**
      * Creates new form Game
      */
-    private ControllerGroupOfInvaders invasores;//invasores
-    private ControllerTank tanque; //tanque
-    private PlayerStatusBar consumiblesTanque; //barrera encargada de mostrar los consumibles
-    private ViewGame viewGame;  //forma de controlar el jframe
+    private FleetController invasores;//invasores
+    private ShipController tanque; //tanque
+    private PlayerStatusBarView consumiblesTanque; //barrera encargada de mostrar los consumibles
+    private WindowView viewGame;  //forma de controlar el jframe
    
     private int typeShoot=0; //tipo de disparo del tanque
     private int operation = 0;//Operacion de los hilos
@@ -56,7 +56,7 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
     /**
      * constructor de personajes y la parte visual
      */
-    public ViewActionScreen() {
+    public ActionScreenView() {
         initComponents();
         visible();
         lvl1();
@@ -80,10 +80,10 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
     public void lvl1(){
         
         //invasores
-        invasores = new ControllerGroupOfInvaders(/*x:*/70, /*y:*/ 30, /*filas:*/ 8, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
+        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 8, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
         invasores.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
         //tanque
-        tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 15,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
+        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 15,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(3, 4, 18, 10, 600);
     }
     /**
@@ -93,10 +93,10 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
               //Creacion de personajes
         
         //invasores
-        invasores = new ControllerGroupOfInvaders(/*x:*/70, /*y:*/ 30, /*filas:*/ 9, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
+        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 9, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
         invasores.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
         //tanque
-        tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
+        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(/*Vidas del tanque*/4,/*super disparos del tanque*/ 4, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
     }
     /**
@@ -106,10 +106,10 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
               //Creacion de personajes
         
         //invasores
-        invasores = new ControllerGroupOfInvaders(/*x:*/70, /*y:*/ 30, /*filas:*/ 10, /*columnas:*/ 10, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate-100);
+        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 10, /*columnas:*/ 10, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate-100);
         invasores.getGroupInvader().addBoss(15, 12, 5, incrementRefreshRate/80);
         //tanque
-        tanque = new ControllerTank(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
+        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
         tanque.getTank().addconsumable(/*Vidas del tanque*/5,/*super disparos del tanque*/ 9, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
     }
 
@@ -247,14 +247,14 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
      * detina el jFrame de el objeto
      * @param viewGame a destinar
      */
-    public void setViewGame(ViewGame viewGame) {
+    public void setViewGame(WindowView viewGame) {
         this.viewGame = viewGame;
     }
     /**
      * destina los consumibles del tanque
      * @param consumiblesTanque consumibles del tanque
      */
-    public void setConsumiblesTanque(PlayerStatusBar consumiblesTanque) {
+    public void setConsumiblesTanque(PlayerStatusBarView consumiblesTanque) {
         this.consumiblesTanque = consumiblesTanque;
     }
     /**
@@ -275,28 +275,28 @@ public class ViewActionScreen extends javax.swing.JPanel implements Runnable {
      * retorna los invasores del objeto
      * @return ControllerGroupOfInvaders( invasores)
      */
-    public ControllerGroupOfInvaders getInvasores() {
+    public FleetController getInvasores() {
         return invasores;
     }
     /**
      * destian los invasores del objeto
      * @param invasores (ControllerGroupOfInvaders)
      */
-    public void setInvasores(ControllerGroupOfInvaders invasores) {
+    public void setInvasores(FleetController invasores) {
         this.invasores = invasores;
     }
     /**
      * retorna el tanque del objeto
      * @return ControllerTank(tanque)
      */
-    public ControllerTank getTanque() {
+    public ShipController getTanque() {
         return tanque;
     }
     /**
      * destian el tanque del objeto
      * @param tanque (ControllerTank)
      */
-    public void setTanque(ControllerTank tanque) {
+    public void setTanque(ShipController tanque) {
         this.tanque = tanque;
     }
    

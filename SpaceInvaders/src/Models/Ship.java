@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -13,11 +13,11 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Tanque
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Tank extends Position{
+public class Ship extends GameObject{
     //disparo del tanque
-    private Shoot shoot;
+    private Bullet shoot;
     //vidas y superDisparos del tanque
-    private TankConsumable consumable;
+    private PlayerShip consumable;
     //posicion inicial del tanque 
     private final int xInitial;
     private final int YInitial;
@@ -27,7 +27,7 @@ public class Tank extends Position{
     /**
      * constructor null de tank
      */
-    public Tank() {
+    public Ship() {
        xInitial = 0;
        YInitial = 0;
     }
@@ -41,7 +41,7 @@ public class Tank extends Position{
     * @param speedBullet velocidad de la bala disparada por el tanque
     * @param refreshShoot fps de bala del tanque
     */
-    public Tank(int x, int y, int width, int height, int speed,int speedBullet, long  refreshShoot) {
+    public Ship(int x, int y, int width, int height, int speed,int speedBullet, long  refreshShoot) {
         super(x, y, speed);
         xInitial = x;
         YInitial = y;
@@ -50,7 +50,7 @@ public class Tank extends Position{
         addShape(x+(width/2)-(width/9), y-4, (width/4), height);
         addShape(x+(width/2)-(width/5), y-2, (width/2), height);
         //creacion disparo 
-        shoot = new Shoot( (int)((width/2)+x-1),y, 5 , 6, speedBullet , refreshShoot);
+        shoot = new Bullet( (int)((width/2)+x-1),y, 5 , 6, speedBullet , refreshShoot);
      
     }
     
@@ -65,7 +65,7 @@ public class Tank extends Position{
      * @param spaceBetweenThem  espacio entre los dos consumibles
      */
     public void addconsumable(int lives, int superShoots,int x, int y, int spaceBetweenThem ){
-        consumable = new TankConsumable();
+        consumable = new PlayerShip();
         consumable.shapeHealth( lives, 20, 10, y);
         consumable.shapeSuperShoot( superShoots, 20, x+spaceBetweenThem, y);
     
@@ -226,21 +226,21 @@ public class Tank extends Position{
      * retorna los consumbles de el tanque
      * @return (Consumable)
      */
-    public TankConsumable getConsumable() {
+    public PlayerShip getConsumable() {
         return consumable;
     }
     /**
      * Obtener la clase de disparo del tanque
      * @return Shoot(shoot)
      */
-    public Shoot getShoot() {
+    public Bullet getShoot() {
         return shoot;
     }
     /**
       *Determina el disparo de la clase Shoot 
       * @param shoot destinado a el tanque
       */
-    public void setShoot(Shoot shoot) {
+    public void setShoot(Bullet shoot) {
         this.shoot = shoot;
     }
     /** 

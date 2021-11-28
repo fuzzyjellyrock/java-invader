@@ -137,7 +137,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="Views.ViewActionScreen" name="game">
+    <Container class="Views.ActionScreenView" name="game">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -167,7 +167,7 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Container class="Views.PlayerStatusBar" name="gameBar1">
+    <Container class="Views.PlayerStatusBarView" name="gameBar1">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -181,7 +181,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Views.PlayerStatusBar(game.getTanque());"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Views.PlayerStatusBarView(game.getTanque());"/>
       </AuxValues>
 
       <Layout>

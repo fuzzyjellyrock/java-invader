@@ -5,7 +5,7 @@
  */
 package Views;
 
-import Controller.ControllerTank;
+import Controllers.ShipController;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,17 +16,17 @@ import java.util.ArrayList;
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class PlayerStatusBar extends javax.swing.JPanel {
+public class PlayerStatusBarView extends javax.swing.JPanel {
 
     /**
      * Creates new form gameBar
      */
-    private ControllerTank tanque;
+    private ShipController tanque;
     
-    public PlayerStatusBar() {
+    public PlayerStatusBarView() {
  
     }
-    public PlayerStatusBar(ControllerTank tank){
+    public PlayerStatusBarView(ShipController tank){
         tanque = tank;
         initComponents();
     }
@@ -35,14 +35,14 @@ public class PlayerStatusBar extends javax.swing.JPanel {
      * retorna el tanque con sus consumibles 
      * @return ControllerTank
      */
-    public ControllerTank getTanque() {
+    public ShipController getTanque() {
         return tanque;
     }
     /**
      * destina el tanque que sera usado en el objeto
      * @param tanque a destinar
      */
-    public void setTanque(ControllerTank tanque) {
+    public void setTanque(ShipController tanque) {
        this.tanque = tanque;
        repaint();
     }
