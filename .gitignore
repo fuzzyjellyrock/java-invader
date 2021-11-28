@@ -1,7 +1,12 @@
-/SpaceInvaders/nbproject/private
 .DS_Store
-/SpaceInvaders/build/
-/SpaceInvaders/dist/
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
 *.class
 *.log
 *.ctxt
