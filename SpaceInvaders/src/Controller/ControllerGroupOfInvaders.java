@@ -5,7 +5,6 @@
  */
 package Controller;
 
-import Model.GroupOfWalls;
 import Model.Aliens;
 import Model.Tank;
 import Model.Fleet;
@@ -79,13 +78,7 @@ public class ControllerGroupOfInvaders {
     public void addGroupInvader(int widthInvader,int heightInvader,int spaceBetweenInvaders,int speedBullet,long refreshBullet) {
         groupInvader.addGroupInvader(widthInvader, heightInvader, spaceBetweenInvaders, speedBullet, refreshBullet);
     }
-    /**
-     * detecta si alguna nave tiene colision con algun muro
-     * @param walls grupo de muros por los que las naves peden  pasar
-     */
-    public void detectionWall(ArrayList<GroupOfWalls> walls){
-        groupInvader.detectionWall(walls);
-    }
+    
     //--------------------------------------
     
     /**
@@ -112,8 +105,8 @@ public class ControllerGroupOfInvaders {
      *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
      * @see model.GroupOfInvaders/shoot()
      */
-    public int shootInvader(int invader, Tank tank, ArrayList<GroupOfWalls> walls) {
-        return groupInvader.getInvaders().get(invader).shoot(tank, walls);
+    public int shootInvader(int invader, Tank tank) {
+        return groupInvader.getInvaders().get(invader).shoot(tank);
     }
 
     //------------------GetSetters---------------------------------------

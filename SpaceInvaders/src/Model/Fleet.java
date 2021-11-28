@@ -309,15 +309,7 @@ public class Fleet {
     
     
     //------colision
-    /**
-     * detecta si alguna nave tiene colision con algun muro
-     * @param walls grupo de muros por los que las naves peden  pasar
-     */
-    public void detectionWall(ArrayList<GroupOfWalls> walls){
-        for (Aliens invader : invaders) {
-            invader.wallMoveDetection(walls);
-        }
-    }
+    
     /**
      * Detecta si algun disparo del tanque colisiono con alguna de las naves, si
      * lo hace retorna la posición de la nave frente a el atributo

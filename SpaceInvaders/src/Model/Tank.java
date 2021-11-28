@@ -103,7 +103,7 @@ public class Tank extends Position{
      *         <br></b>1</b> si le dio a un muro
      *         <br></b>2</b> si llego al limite superiro(position/limitUp)
     */
-    public int shoot(Fleet enemy,ArrayList<GroupOfWalls> walls){
+    public int shoot(Fleet enemy){
         
         //retorna -2 ya no hay naves
         //retorna -1 si no paso nada 
@@ -123,11 +123,7 @@ public class Tank extends Position{
                  returnShoot();//retorna la bala
                  return 0;//choco con invasor
             }
-            if (wallDetection(walls,true)==true) {//si le dio a un muro
-                //System.out.println("colision del tanque a muro");
-           
-                return 1;//choco con un muro
-            } 
+            
             return -1;//el disparo sigue normal para delante
         }else{//si el disparo llego al limite retorna la bala a la posición del tanque
          returnShoot();
@@ -143,7 +139,7 @@ public class Tank extends Position{
      *         <br></b>1</b> si le dio a un muro
      *         <br></b>2</b> si llego al limite superiro(position/limitUp)
     */
-    public int SuperShoot(Fleet enemy,ArrayList<GroupOfWalls> walls){
+    public int SuperShoot(Fleet enemy){
         
         //retorna -2 ya no hay naves
         //retorna -1 si no paso nada
@@ -162,10 +158,7 @@ public class Tank extends Position{
                // System.out.println("colision del tanque a invasor");
                  return 0;//choco con invasor
             }
-            if (wallDetection(walls,true)==true) {//si le dio a un muro
-                //System.out.println("colision del tanque a muro");
-                return 1;//choco con un muro
-            } 
+             
             return -1;//el disparo sigue normal para delante
         }else{//si el disparo llego al limite retorna la bala a la posición del tanque
           return 2;//lego al limite
@@ -211,21 +204,7 @@ public class Tank extends Position{
     }
     
     //-------colisión
-    /**
-     * determina si algun grupo de muros choco con la bala del tanque
-     * @param walls muros a los que puede afectar 
-     * @param remove si es "true " elimina la forma del muro, pero si es "false" no elimina el muro
-  * @return <b>True</b> si tuvo colisión
-     *     <br></b>false</b> si no tuvo colisión
-     */
-    public boolean wallDetection(ArrayList<GroupOfWalls> walls,boolean remove) {
-        for(int i = 0; i < walls.size();i++){
-            if( walls.get(i).colisiones(shoot.getShape().get(0),remove)>= 0 ){//detecta si un disparo le dio a un determinado grupo de muros(groupOfWall.get(i))
-                return true;
-            }
-        } 
-        return false;
-    }
+   
     /**
     * Detecta si un disparo enemigo en este caso un rectangulo, tuvo colision con el tanque
     * @param enemyShoot disparo dado por el enemigo
