@@ -1,4 +1,7 @@
 /SpaceInvaders/nbproject/private
-/SpaceInvaders/.DS_Store
+.DS_Store
 /SpaceInvaders/build/
 /SpaceInvaders/dist/
+*.class
+*.log
+*.ctxt
