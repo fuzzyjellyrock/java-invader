@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
-import Model.Player;
+package Controllers;
+import Models.Player;
 /**
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class UserController {
+public class PlayerController {
     private  Player user;
-      public UserController() {
+      public PlayerController() {
         user= new Player();
     }
-    public UserController(String name) {
+    public PlayerController(String name) {
         user = new Player(name);
     }
 //------------------Methods-------------------------------------------

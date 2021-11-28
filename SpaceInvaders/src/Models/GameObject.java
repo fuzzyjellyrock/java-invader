@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 
 import java.awt.geom.Rectangle2D;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Position
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Position {
+public class GameObject {
     private int speed;
     private int x;
     private int y;
@@ -29,14 +29,14 @@ public class Position {
     /**
      * constructor position null
      */
-    public Position() {
+    public GameObject() {
     }
     /**
      * Constructor position con parametros completos
      * @param x ubicacion principal en el eje c de la position
      * @param y ubicacion principal en el eje y de la position
      */
-    public Position(int x, int y, int speed) {
+    public GameObject(int x, int y, int speed) {
         this.speed = speed;
         this.x = x;
         this.y = y;

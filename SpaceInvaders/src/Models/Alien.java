@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -12,16 +12,16 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Invader
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Aliens extends Position {
+public class Alien extends GameObject {
 
-    private Shoot shoot;
+    private Bullet shoot;
     private boolean dead  = false;
 
 //-----------------Constructor-----------------------------------------
     /**
      * constructor null de invasor
      */
-    public Aliens() {
+    public Alien() {
     }
 
     /**
@@ -35,12 +35,12 @@ public class Aliens extends Position {
      * @param speedBullet velocidad de la bala del invader
      * @param refreshShoot fps de el invasor
      */
-    public Aliens(int x, int y, int width, int height, int speed, int speedBullet, long refreshShoot) {
+    public Alien(int x, int y, int width, int height, int speed, int speedBullet, long refreshShoot) {
         super(x, y, speed);
         
 
         //creacion de la bala 
-        shoot = new Shoot((int) ((width / 2) + x - 1), y, 3, 5, speedBullet, refreshShoot);
+        shoot = new Bullet((int) ((width / 2) + x - 1), y, 3, 5, speedBullet, refreshShoot);
     }
     //------------------Methods-------------------------------------------
     //movimiento de el invasor
@@ -107,7 +107,7 @@ public class Aliens extends Position {
      *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
      * @see Invader/removeOrMoveShoot()
      */
-    public int shoot(Tank enemy) {
+    public int shoot(Ship enemy) {
         /*
         retorna 0 si el el diparo va normal}
         retorna 1 cuando regresa el disparo al invasor normal
@@ -176,7 +176,7 @@ public class Aliens extends Position {
      *
      * @return Shoot(shoot)
      */
-    public Shoot getShoot() {
+    public Bullet getShoot() {
         return shoot;
     }
     /**
@@ -184,7 +184,7 @@ public class Aliens extends Position {
      *
      * @param shoot destinado a el invasor
      */
-    public void setShoot(Shoot shoot) {
+    public void setShoot(Bullet shoot) {
         this.shoot = shoot;
     }
     /**

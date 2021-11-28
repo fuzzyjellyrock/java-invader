@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Model;
+package Models;
 
 import java.util.ArrayList;
 
@@ -11,14 +11,14 @@ import java.util.ArrayList;
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class TankConsumable {
+public class PlayerShip {
     
     //vidas del lives
-    private ArrayList< Tank > lives;
+    private ArrayList< Ship > lives;
     private int livesSize ;
     private int emptySpaceLives ;
     //super disparos
-    private ArrayList< Shoot > superShoot;
+    private ArrayList< Bullet > superShoot;
     private int superShootsSize;
     private int emptySpaceSuperShoot ;
     
@@ -26,7 +26,7 @@ public class TankConsumable {
      /**
      * constructor de lives null
      */
-     public TankConsumable() {
+     public PlayerShip() {
         this.lives = new ArrayList<>();
         this.superShoot = new ArrayList<>();
     }
@@ -69,7 +69,7 @@ public class TankConsumable {
         int xAux = x;
         for (int i = 0; i < livesSize; i++) {//cantidad de vidas en forma de tanque
         
-             Tank aux = new Tank(/*x:*/xAux,/*y:*/ y, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 0,/*velocidad bala:*/ 0,/*fps bala:*/ 0);
+             Ship aux = new Ship(/*x:*/xAux,/*y:*/ y, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 0,/*velocidad bala:*/ 0,/*fps bala:*/ 0);
              xAux += emptySpaceLives + aux.getShape().get(0).getWidth();
              lives.add(aux);
         }
@@ -82,7 +82,7 @@ public class TankConsumable {
     public void addShapeSuperShoot(int x, int y){
         int xAux = x;
         for (int i = 0; i < superShootsSize; i++) {
-             Shoot aux = new Shoot(xAux, y, 8 , 15, 0, 0);
+             Bullet aux = new Bullet(xAux, y, 8 , 15, 0, 0);
              aux.addShape(xAux-7, y+16, 20, 3);
              xAux -= emptySpaceSuperShoot + aux.getShape().get(0).getWidth();
              superShoot.add(aux);
@@ -126,7 +126,7 @@ public class TankConsumable {
      * retorna las vidas en forma de tanque
      * @return lives(ArrayList"Tank")
      */
-    public ArrayList<Tank> getlives() {
+    public ArrayList<Ship> getlives() {
         return lives;
     }
     /**
@@ -147,7 +147,7 @@ public class TankConsumable {
      * retorna los super disparos de el tanque
      * @return superShoot(ArrayList"Shoot")
      */
-    public ArrayList<Shoot> getSuperShoot() {
+    public ArrayList<Bullet> getSuperShoot() {
         return superShoot;
     }
     /**

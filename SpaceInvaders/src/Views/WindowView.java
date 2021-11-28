@@ -5,7 +5,7 @@
  */
 package Views;
 
-import Controller.UserController;
+import Controllers.PlayerController;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,14 +19,14 @@ import javax.swing.JOptionPane;
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class ViewGame extends javax.swing.JFrame {
+public class WindowView extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        game = new Views.ViewActionScreen();
-        gameBar1 = new Views.PlayerStatusBar(game.getTanque());
+        game = new Views.ActionScreenView();
+        gameBar1 = new Views.PlayerStatusBarView(game.getTanque());
         jScrollPane1 = new javax.swing.JScrollPane();
         TxtArearecordScore = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
@@ -65,7 +65,6 @@ public class ViewGame extends javax.swing.JFrame {
 
         gameBar1.setBackground(new java.awt.Color(0, 0, 0));
         gameBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 7), 2));
-        gameBar1.setForeground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout gameBar1Layout = new javax.swing.GroupLayout(gameBar1);
         gameBar1.setLayout(gameBar1Layout);
@@ -227,7 +226,7 @@ public class ViewGame extends javax.swing.JFrame {
     private Thread moveTank;
 
     //usuario
-    private UserController user;
+    private PlayerController user;
     //estado de game over
     private int dead;
 
@@ -235,7 +234,7 @@ public class ViewGame extends javax.swing.JFrame {
     private int round=0;
     private int incrementLvl = 0;
 
-    public ViewGame() {
+    public WindowView() {
         initComponents();
         //cambia los colores
         getContentPane().setBackground(Color.BLACK);
@@ -300,7 +299,7 @@ public class ViewGame extends javax.swing.JFrame {
             if (name.equals("")) {
                 name = "anonimo";
             }
-            user = new UserController(name);
+            user = new PlayerController(name);
 
             //nivel al que pasa
             incrementLvl = 0;//elije el nivel
@@ -497,10 +496,10 @@ public class ViewGame extends javax.swing.JFrame {
     public int getRound() {
         return round;
     }
-    public UserController getUser() {
+    public PlayerController getUser() {
         return user;
     }
-    public void setUser(UserController user) {
+    public void setUser(PlayerController user) {
         this.user = user;
     }
     public int getDead() {
@@ -533,28 +532,31 @@ public class ViewGame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewGame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewGame().setVisible(true);
+                new WindowView().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea TxtArearecordScore;
-    private Views.ViewActionScreen game;
-    private Views.PlayerStatusBar gameBar1;
+    private Views.ActionScreenView game;
+    private Views.PlayerStatusBarView gameBar1;
     private javax.swing.JButton jBegin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

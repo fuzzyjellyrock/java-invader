@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller;
+package Controllers;
 
-import Model.Tank;
-import Model.TankConsumable;
-import Model.Fleet;
+import Models.Ship;
+import Models.PlayerShip;
+import Models.Fleet;
 import java.util.ArrayList;
 
 /**
  * Controlador para el tanque
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class ControllerTank {
+public class ShipController {
         
-    private Tank tank;
+    private Ship tank;
     
  //-----------------Constructor---------------------------------------
     
     /**
      * constructor null de tank
      */
-     public ControllerTank() {
-        tank = new Tank();
+     public ShipController() {
+        tank = new Ship();
     }
     /**
     * 
@@ -37,8 +37,8 @@ public class ControllerTank {
     * @param speedBullet velocidad de  bala del tanqeu
     * @param refreshShoot fps de bala del tanque
     */
-    public ControllerTank(int x, int y, int width, int height, int speed,int speedBullet, long  refreshShoot) {
-        this.tank = new Tank(x, y, width, height, speed, speedBullet, refreshShoot);
+    public ShipController(int x, int y, int width, int height, int speed,int speedBullet, long  refreshShoot) {
+        this.tank = new Ship(x, y, width, height, speed, speedBullet, refreshShoot);
     }
     
     //------------------Methods-------------------------------------------
@@ -85,21 +85,21 @@ public class ControllerTank {
      * retorna el tanque(model.Tank/tank) utilizado en el controlador
      * @return Tank(tank)
      */
-    public Tank getTank() {
+    public Ship getTank() {
         return tank;
     }
     /**
      * destina el tanque utilizado en el controlador
      * @param tank  destinado al objeto
      */
-    public void setTank(Tank tank) {
+    public void setTank(Ship tank) {
         this.tank = tank;
     }
     /**
      * retorna los consumbles de el tanque
      * @return (Consumable)
      */
-    public TankConsumable getConsumable(){
+    public PlayerShip getConsumable(){
         return tank.getConsumable();
     }
     
