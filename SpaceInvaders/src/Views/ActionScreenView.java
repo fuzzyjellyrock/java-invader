@@ -67,7 +67,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
         visual[1] = true;//mostrar balas de las naves
         visual[2] = true;//mostrar el tanque
         visual[3] = true;//mostrar la balas de tanque
-        visual[4] = false;//mostrar las barreras de defensa 
+
     }
     
     //Creación de niveles

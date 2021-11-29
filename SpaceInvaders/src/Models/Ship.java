@@ -15,7 +15,7 @@ public class Ship extends GameObject{
     //disparo del tanque
     private Bullet shoot;
     //vidas y superDisparos del tanque
-    private PlayerShip consumable;
+    private ShipObjects consumable;
     //posicion inicial del tanque 
     private final int xInitial;
     private final int YInitial;
@@ -63,7 +63,7 @@ public class Ship extends GameObject{
      * @param spaceBetweenThem  espacio entre los dos consumibles
      */
     public void addconsumable(int lives, int superShoots,int x, int y, int spaceBetweenThem ){
-        consumable = new PlayerShip();
+        consumable = new ShipObjects();
         consumable.shapeHealth( lives, 20, 10, y);
         consumable.shapeSuperShoot( superShoots, 20, x+spaceBetweenThem, y);
     
@@ -224,7 +224,7 @@ public class Ship extends GameObject{
      * retorna los consumbles de el tanque
      * @return (Consumable)
      */
-    public PlayerShip getConsumable() {
+    public ShipObjects getConsumable() {
         return consumable;
     }
     /**

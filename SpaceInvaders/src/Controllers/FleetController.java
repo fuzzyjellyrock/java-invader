@@ -11,7 +11,7 @@ import Models.Fleet;
 
 /**
  * Controlador para el grupo de invasores
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class FleetController {
 

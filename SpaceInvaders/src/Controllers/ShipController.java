@@ -6,7 +6,7 @@
 package Controllers;
 
 import Models.Ship;
-import Models.PlayerShip;
+import Models.ShipObjects;
 import Models.Fleet;
 
 /**
@@ -98,7 +98,7 @@ public class ShipController {
      * retorna los consumbles de el tanque
      * @return (Consumable)
      */
-    public PlayerShip getConsumable(){
+    public ShipObjects getConsumable(){
         return tank.getConsumable();
     }
     
