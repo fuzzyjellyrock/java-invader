@@ -72,7 +72,7 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs); //To change body of generated methods, choose Tools | Templates.
         Graphics2D imgComplete = (Graphics2D) grphcs;
-           float[] color = Color.RGBtoHSB(0,255,7, null);
+        float[] color = Color.RGBtoHSB(0,7,255, null);
         imgComplete.setColor(Color.getHSBColor(color[0], color[1], color[2]));
         try {
              for (int i = 0; i < tanque.getConsumable().getLivesSize(); i++) {

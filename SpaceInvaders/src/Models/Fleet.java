@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /**
  * Clase que contiene los atributos y métodos de los invasores como una unidad
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class Fleet {
 

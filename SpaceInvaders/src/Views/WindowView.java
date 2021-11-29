@@ -42,7 +42,7 @@ public class WindowView extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         game.setBackground(new java.awt.Color(0, 0, 0));
-        game.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 7), 2));
+        game.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 7, 255), 2));
         game.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 gameKeyPressed(evt);
@@ -61,7 +61,7 @@ public class WindowView extends javax.swing.JFrame {
         );
 
         gameBar1.setBackground(new java.awt.Color(0, 0, 0));
-        gameBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 7), 2));
+        gameBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 7, 255), 2));
 
         javax.swing.GroupLayout gameBar1Layout = new javax.swing.GroupLayout(gameBar1);
         gameBar1.setLayout(gameBar1Layout);
@@ -76,7 +76,7 @@ public class WindowView extends javax.swing.JFrame {
 
         buttonStart.setBackground(new java.awt.Color(0, 0, 0));
         buttonStart.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        buttonStart.setForeground(new java.awt.Color(0, 255, 7));
+        buttonStart.setForeground(new java.awt.Color(0, 7, 255));
         buttonStart.setText("START");
         buttonStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -86,15 +86,20 @@ public class WindowView extends javax.swing.JFrame {
 
         txtPlayerName.setBackground(new java.awt.Color(0, 0, 0));
         txtPlayerName.setFont(new java.awt.Font("Showcard Gothic", 0, 14)); // NOI18N
-        txtPlayerName.setForeground(new java.awt.Color(0, 255, 7));
+        txtPlayerName.setForeground(new java.awt.Color(0, 7, 255));
+        txtPlayerName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPlayerNameActionPerformed(evt);
+            }
+        });
 
         lblPlayerName.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblPlayerName.setForeground(new java.awt.Color(0, 255, 7));
+        lblPlayerName.setForeground(new java.awt.Color(0, 7, 255));
         lblPlayerName.setText("PLAYER NAME");
 
         buttonShowLeaderboard.setBackground(new java.awt.Color(0, 0, 0));
         buttonShowLeaderboard.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        buttonShowLeaderboard.setForeground(new java.awt.Color(102, 255, 51));
+        buttonShowLeaderboard.setForeground(new java.awt.Color(0, 7, 255));
         buttonShowLeaderboard.setText("LEADERBOARD");
         buttonShowLeaderboard.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,27 +110,27 @@ public class WindowView extends javax.swing.JFrame {
         panelPlayerStats.setBackground(new java.awt.Color(0, 0, 0));
 
         lblCurrentLevelTitle.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblCurrentLevelTitle.setForeground(new java.awt.Color(0, 255, 7));
+        lblCurrentLevelTitle.setForeground(new java.awt.Color(0, 7, 255));
         lblCurrentLevelTitle.setText("LEVEL");
 
         lblCurrentLevel.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblCurrentLevel.setForeground(new java.awt.Color(0, 255, 7));
+        lblCurrentLevel.setForeground(new java.awt.Color(0, 7, 255));
         lblCurrentLevel.setText("0");
 
         lblCurrentScoreTitle.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblCurrentScoreTitle.setForeground(new java.awt.Color(0, 255, 7));
+        lblCurrentScoreTitle.setForeground(new java.awt.Color(0, 7, 255));
         lblCurrentScoreTitle.setText("CURRENT SCORE:");
 
         lblCurrentScore.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblCurrentScore.setForeground(new java.awt.Color(0, 255, 7));
+        lblCurrentScore.setForeground(new java.awt.Color(0, 7, 255));
         lblCurrentScore.setText("0");
 
         lblHighScoreTitle.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblHighScoreTitle.setForeground(new java.awt.Color(0, 255, 7));
+        lblHighScoreTitle.setForeground(new java.awt.Color(0, 7, 255));
         lblHighScoreTitle.setText("HIGH SCORE: ");
 
         lblHighScore.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        lblHighScore.setForeground(new java.awt.Color(0, 255, 7));
+        lblHighScore.setForeground(new java.awt.Color(0, 7, 255));
         lblHighScore.setText("0");
 
         javax.swing.GroupLayout panelPlayerStatsLayout = new javax.swing.GroupLayout(panelPlayerStats);
@@ -354,6 +359,10 @@ public class WindowView extends javax.swing.JFrame {
         LeaderboardWindow lb = new LeaderboardWindow(this, true, this.lbCon);
         lb.setVisible(true);
     }//GEN-LAST:event_buttonShowLeaderboardActionPerformed
+
+    private void txtPlayerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlayerNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPlayerNameActionPerformed
     /**
      * permite parar el juego y reiniciar los puntos del usuario(gameOver)
      */
@@ -401,7 +410,7 @@ public class WindowView extends javax.swing.JFrame {
           //si el usurio paso de nivel y mato todas las naves
         if (playerCon.getPlayer().getLvl() != 1 ||  dead == 0) {//apaga las acciones si paso de nivel
             playerCon.addPoints(20);
-            JOptionPane.showMessageDialog(null, "¡siguiente nivel!");
+            JOptionPane.showMessageDialog(null, "¡Siguiente nivel!");
             stopThread();
         }else{//activar primer nivel
             game.setRefreshRate(800);

@@ -67,7 +67,7 @@ public class LeaderboardWindow extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tableLeaderboard.setBackground(new java.awt.Color(0, 0, 0));
-        tableLeaderboard.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(51, 255, 0), null));
+        tableLeaderboard.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 7, 255), null));
         tableLeaderboard.setForeground(new java.awt.Color(255, 255, 255));
         tableLeaderboard.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -83,13 +83,13 @@ public class LeaderboardWindow extends javax.swing.JDialog {
         scrollPaneLeaderboard.setViewportView(tableLeaderboard);
 
         lblHighScoreTitle.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
-        lblHighScoreTitle.setForeground(new java.awt.Color(0, 255, 7));
+        lblHighScoreTitle.setForeground(new java.awt.Color(0, 7, 255));
         lblHighScoreTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHighScoreTitle.setText("LEADERBOARD");
 
         buttonClose.setBackground(new java.awt.Color(0, 0, 0));
         buttonClose.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
-        buttonClose.setForeground(new java.awt.Color(51, 255, 0));
+        buttonClose.setForeground(new java.awt.Color(0, 7, 255));
         buttonClose.setText("CLOSE");
         buttonClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

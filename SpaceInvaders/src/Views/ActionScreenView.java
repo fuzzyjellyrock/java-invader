@@ -312,7 +312,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     protected void paintComponent(Graphics img) {
         super.paintComponent(img);
         Graphics2D imgComplete = (Graphics2D) img;
-        float[] color = Color.RGBtoHSB(0,255,7, null);
+        float[] color = Color.RGBtoHSB(0,7,255, null);
         imgComplete.setColor(Color.getHSBColor(color[0], color[1], color[2]));
         //--------------ver naves---------------------------------
         if (visual[0] == true) {

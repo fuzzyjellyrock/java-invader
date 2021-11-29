@@ -99,7 +99,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
             <LineBorder thickness="2">
-              <Color PropertyName="color" blue="7" green="ff" red="0" type="rgb"/>
+              <Color PropertyName="color" blue="ff" green="7" red="0" type="rgb"/>
             </LineBorder>
           </Border>
         </Property>
@@ -129,7 +129,7 @@
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
             <LineBorder thickness="2">
-              <Color PropertyName="color" blue="7" green="ff" red="0" type="rgb"/>
+              <Color PropertyName="color" blue="ff" green="7" red="0" type="rgb"/>
             </LineBorder>
           </Border>
         </Property>
@@ -160,7 +160,7 @@
           <Font name="Rockwell" size="18" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="7" green="ff" red="0" type="rgb"/>
+          <Color blue="ff" green="7" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="START"/>
       </Properties>
@@ -177,9 +177,12 @@
           <Font name="Showcard Gothic" size="14" style="0"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="7" green="ff" red="0" type="rgb"/>
+          <Color blue="ff" green="7" red="0" type="rgb"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtPlayerNameActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblPlayerName">
       <Properties>
@@ -187,7 +190,7 @@
           <Font name="Rockwell" size="18" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="7" green="ff" red="0" type="rgb"/>
+          <Color blue="ff" green="7" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="PLAYER NAME"/>
       </Properties>
@@ -201,7 +204,7 @@
           <Font name="Rockwell" size="18" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="33" green="ff" red="66" type="rgb"/>
+          <Color blue="ff" green="7" red="0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="LEADERBOARD"/>
       </Properties>
@@ -264,7 +267,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="LEVEL"/>
           </Properties>
@@ -275,7 +278,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
@@ -286,7 +289,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="CURRENT SCORE:"/>
           </Properties>
@@ -297,7 +300,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
@@ -308,7 +311,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="HIGH SCORE: "/>
           </Properties>
@@ -319,7 +322,7 @@
               <Font name="Rockwell" size="18" style="1"/>
             </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="7" green="ff" red="0" type="rgb"/>
+              <Color blue="ff" green="7" red="0" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="0"/>
           </Properties>
