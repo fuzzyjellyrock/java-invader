@@ -5,9 +5,7 @@
  */
 package Models;
 
-import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 /**
  * Bloque con los atributos y métodos de la clase Tanque

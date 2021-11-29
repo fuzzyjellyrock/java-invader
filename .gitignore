@@ -10,3 +10,4 @@ nbdist/
 *.class
 *.log
 *.ctxt
+/SpaceInvaders/leaderboard.obj
