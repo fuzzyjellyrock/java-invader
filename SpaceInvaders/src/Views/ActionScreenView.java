@@ -12,10 +12,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.xml.transform.Source;
+
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
@@ -131,7 +128,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             }
                   if (disparo == 0) {
                 viewGame.getUser().addPoints(10);
-                viewGame.showActualScore();
+                viewGame.showCurrentScore();
                 
             }
                    if (disparo == -2) {
@@ -157,7 +154,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
                 
                      if (disparo == 0) {
                 viewGame.getUser().addPoints(10);
-                viewGame.showActualScore();
+                viewGame.showCurrentScore();
                 
                  }
                 if (disparo == -2) {
@@ -364,7 +361,6 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     @Override
     public void run() {
         //movimiento de tanque
-        // System.out.println("operacion "+operation);
         if (operation == 0) {
             tanque.moveLeftWithShoot();
             repaint();

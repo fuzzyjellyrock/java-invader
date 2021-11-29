@@ -10,42 +10,49 @@ import Models.Player;
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
 public class PlayerController {
-    private  Player user;
-      public PlayerController() {
-        user= new Player();
+    private Player player;
+    
+    public PlayerController() {
+        this.player = new Player();
     }
+    
     public PlayerController(String name) {
-        user = new Player(name);
+        this.player = new Player(name);
     }
 //------------------Methods-------------------------------------------
+    
+    /**
+     * Converts the current player level into a String and returns it.
+     * 
+     * @return a String object with the player current level.
+     */
+    public String getPlayerLevel(){
+        return String.valueOf(this.player.getLvl());
+    }
+    
+    /**
+     * Converts the current player score into a String and returns it.
+     * 
+     * @return a String object with the player current score.
+     */
+    public String getPlayerScore(){
+        return String.valueOf(this.player.getScore());
+    }
     
     /**
      * resetea los puntos del usuario(se usa cuando el usuario murio)
      */
     public void resetPoints(){
-        user.resetPoints();
+        player.resetPoints();
     }
-    /**
-     * registra en el txt un nuevo usuario, si el usuario supero un record ya registrado
-     */
-    public void positionInRecords(){
-    user.positionInRecords();
-    }
-    /**
-     * registra el record en el txt (records.txt) si el record supero alguno solo ingresa(int > -1) si ingresa -1 no se registra nada
-     * @param addRecord posicion dentro del podio del usuario
-     * @return retorna el nuevo texto que ira en el txt (hace uso del metodo checheckOtherRecords());
-     */
-    public String readRecordsWithNewRecord(){
-      return user.readRecordsWithNewRecord(-1);
-    }
+
     /**
      * suma puntos al usuario 
      * @param score puntos a sumar
      * @return retorna los puntos actuales del usuario
      */
     public int addPoints(int score){
-       return user.scorePoints(score);
+       return player.scorePoints(score);
     }
     /**
      * suma niveles al usuario 
@@ -53,12 +60,16 @@ public class PlayerController {
      * @return retorna los niveles actuales del usuario
      */
     public int addLevels(int lvl){
-       return user.addLevels(lvl);
+       return player.addLevels(lvl);
     }
     
-
-    public Player getUser() {
-        return user;
+    /**
+     * Returns the player contained inside this controller.
+     * 
+     * @return Player object inside the controller.
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     
