@@ -71,6 +71,15 @@ public class PlayerController {
     public Player getPlayer() {
         return player;
     }
+    
+    /**
+     * Returns a String with the current player's name.
+     * 
+     * @return a String with the player's name
+     */
+    public String getPlayerName(){
+        return this.player.getName();
+    }
 
     
 }

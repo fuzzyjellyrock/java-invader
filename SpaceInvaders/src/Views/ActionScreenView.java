@@ -12,7 +12,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
@@ -351,45 +350,57 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     @Override
     protected void paintComponent(Graphics img) {
         super.paintComponent(img);
-        Graphics2D imgComplete = (Graphics2D) img;
-        float[] color = Color.RGBtoHSB(0,255,7, null);
-        imgComplete.setColor(Color.getHSBColor(color[0], color[1], color[2]));
+        
         //--------------ver naves---------------------------------
+        
         if (visualElements[0] == true) {
+            Graphics2D aliens = (Graphics2D) img.create();
             for (int i = 0; i < invasores.getGroupInvader().getInvaders().size(); i++) {
                 for (int j = 0; j < invasores.getGroupInvader().getInvaders().get(i).getShape().size(); j++) {
+                    aliens.setColor(Color.WHITE);
                     if (typeShoot == 1) {//si es el super disparo
-                    imgComplete.setColor(Color.YELLOW);
-                }
+                        aliens.setColor(Color.RED);
+                    }
                     
                     Rectangle2D invasor = invasores.getGroupInvader().getInvaders().get(i).getShape().get(j);
-                    imgComplete.fill(invasor);
+                    aliens.fill(invasor);
                 }
                 //---------------ver disparos de naves----------------------------------
+                Graphics2D aliensBullets = (Graphics2D) img.create();
                 if (visualElements[1] == true) {
                     try {//solo si existe disparo
                         Rectangle2D invasorShoot = invasores.getGroupInvader().getInvaders().get(i).getShoot().getShape().get(0);
-                        imgComplete.fill(invasorShoot);
+                        aliensBullets.setColor(Color.MAGENTA);
+                        aliensBullets.fill(invasorShoot);
                     } catch (Exception e) {
                     }
                 }
             }
+            aliens.dispose();
         }
+        
+        Graphics2D player = (Graphics2D) img;
+        float[] color = Color.RGBtoHSB(0,255,7, null);
+        player.setColor(Color.getHSBColor(color[0], color[1], color[2]));
+        
         //------------------ver tanque---------------------------
         if (visualElements[2] == true) {
             for (int i = 0; i < tanque.getTank().getShape().size(); i++) {
                 Rectangle2D tank = tanque.getTank().getShape().get(i);
-                imgComplete.fill(tank);
+                player.fill(tank);
             }
         }
+        
+        Graphics2D playerBullets = (Graphics2D) img;
         //----------------ver disparo del tanque-------------------------------
         if (visualElements[3] == true) {
             for (int i = 0; i < tanque.getTank().getShoot().getShape().size(); i++) {
-                 Rectangle2D tankShoot = tanque.getTank().getShoot().getShape().get(i);
-                 if (typeShoot == 1) {//si es el super disparo
-                    imgComplete.setColor(Color.YELLOW);
+                Rectangle2D tankShoot = tanque.getTank().getShoot().getShape().get(i);
+                playerBullets.setColor(Color.getHSBColor(color[0], color[1], color[2]));
+                if (typeShoot == 1) {//si es el super disparo
+                    playerBullets.setColor(Color.ORANGE);
                 }
-            imgComplete.fill(tankShoot);
+                playerBullets.fill(tankShoot);
             }
 
         }     

@@ -71,22 +71,26 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
     @Override
     protected void paintComponent(Graphics grphcs) {
         super.paintComponent(grphcs); //To change body of generated methods, choose Tools | Templates.
-        Graphics2D imgComplete = (Graphics2D) grphcs;
-           float[] color = Color.RGBtoHSB(0,255,7, null);
-        imgComplete.setColor(Color.getHSBColor(color[0], color[1], color[2]));
+        Graphics2D playerLives = (Graphics2D) grphcs;
+        float[] color = Color.RGBtoHSB(0,255,7, null);
+        playerLives.setColor(Color.getHSBColor(color[0], color[1], color[2]));
         try {
-             for (int i = 0; i < tanque.getConsumable().getLivesSize(); i++) {
-            ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getlives().get(i).getShape();//formas del tanque
-            for (int j = 0; j <  shapes.size(); j++) {
-                imgComplete.fill(shapes.get(j));
+            for (int i = 0; i < tanque.getConsumable().getLivesSize(); i++) {
+                ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getlives().get(i).getShape();//formas del tanque
+                for (int j = 0; j <  shapes.size(); j++) {
+                    playerLives.fill(shapes.get(j));
+                }
             }
-        }
-        for (int i = 0; i < tanque.getConsumable().getSuperShootsSize(); i++) {
-              ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getSuperShoot().get(i).getShape();//formas del tanque
-            for (int j = 0; j <  shapes.size(); j++) {
-                imgComplete.fill(shapes.get(j));
+            
+            Graphics2D playerMissiles = (Graphics2D) grphcs;
+            playerMissiles.setColor(Color.ORANGE);
+            
+            for (int i = 0; i < tanque.getConsumable().getSuperShootsSize(); i++) {
+                ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getSuperShoot().get(i).getShape();//formas del tanque
+                for (int j = 0; j <  shapes.size(); j++) {
+                    playerMissiles.fill(shapes.get(j));
+                }
             }
-        }
         } catch (Exception e) {
         }
        
