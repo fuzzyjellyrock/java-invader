@@ -12,6 +12,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
@@ -22,6 +25,12 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     /**
      * Creates new form Game
      */
+    
+    //ThreadController
+    private int interval;
+    private AtomicBoolean running = new AtomicBoolean(false);
+    private AtomicBoolean stopped = new AtomicBoolean(true);
+    
     private FleetController invasores;//invasores
     private ShipController tanque; //tanque
     private PlayerStatusBarView consumiblesTanque; //barrera encargada de mostrar los consumibles
@@ -226,6 +235,10 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     }
 //------------------GetSetters----------------------------------------
     
+    public void setSleepInterval(int interval){
+        this.interval = interval;
+    }
+    
     /**
      * resta la entrada de parametros a la tasa de refresco
      * @param incrementRefreshRate puntos a restar
@@ -360,35 +373,48 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     @Override
     public void run() {
-        //movimiento de tanque
-        if (operation == 0) {
-            tanque.moveLeftWithShoot();
-            repaint();
-        }
-        if (operation == 1) {
-            tanque.moveRightWithShoot();
-            repaint();
-        }
-        //disparo del tanque
-        if (operation == 3) {
-            if (typeShoot ==0) {
-                tankShoot();
-            }if (typeShoot == 1) {
-                tankSuperShoot();
+        
+        boolean stop = false;
+        while (!Thread.interrupted() && !stop) {
+            switch(this.operation) {
+                case 0:
+                    //movimiento de tanque
+                    tanque.moveLeftWithShoot();
+                    repaint();
+                    break;
+                case 1:
+                    //movimiento de tanque
+                    tanque.moveRightWithShoot();
+                    repaint();
+                    break;
+                case 2:
+                    //disparo del tanque
+                    if (typeShoot == 0) {
+                        tankShoot();
+                    }else if (typeShoot == 1) {
+                        tankSuperShoot();
+                    }
+                    break;
+                case 3:
+                    //movimiento de los invasores
+                    moveInvaders();
+                    break;
+                case 4:
+                    //disparo invasores
+                    while (!Thread.interrupted()) {
+                        invaderShoot();
+                    }
+                    break;
+                default:
+                {
+                    System.out.println("Thread stopped early. ActionScreenView run() method has no valid argument to run code.");
+                }
+
             }
-            
+            stop = true;
         }
-        //movimiento de los invasores
-        if (operation == 4) {
-            moveInvaders();
-        }
-        //disparo invasores
-        if (operation == 5) {
-            while (true) {
-                invaderShoot();
-            }
-        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    }
+    
 }

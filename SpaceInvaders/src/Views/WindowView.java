@@ -353,6 +353,8 @@ public class WindowView extends javax.swing.JFrame {
     private void buttonShowLeaderboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowLeaderboardActionPerformed
         LeaderboardWindow lb = new LeaderboardWindow(this, true, this.lbCon);
         lb.setVisible(true);
+        game.setFocusable(true);
+        buttonShowLeaderboard.setFocusable(false);
     }//GEN-LAST:event_buttonShowLeaderboardActionPerformed
     /**
      * permite parar el juego y reiniciar los puntos del usuario(gameOver)
@@ -361,9 +363,9 @@ public class WindowView extends javax.swing.JFrame {
         dead = 1;//game over
         //resetea al usuario y lo hubica en el ranking
         if (game.getTanque().getTank().getY()!=game.getTanque().getTank().getShoot().getY()) {
-            shipBullets.stop();
+            shipBullets.interrupt();
         }
-        JOptionPane.showMessageDialog(null, "game over");
+        JOptionPane.showMessageDialog(null, "Game Over");
         this.lbCon.addNewScore(playerCon.getPlayer());
         playerCon.resetPoints();
         showHighScore();
@@ -374,13 +376,11 @@ public class WindowView extends javax.swing.JFrame {
      * para los hilos de diparo, para que se activen cuando sea nescesario
      */
     public void stopThread() {
-        for (Thread thread : aliensBullets) {
-            if (thread.isAlive()==true) {
-            thread.stop();
+        for (Thread current : aliensBullets) {
+            if (current.isAlive()==true) {
+                current.interrupt();
             }
         }
-        
-
     }
     
     /**
@@ -464,7 +464,7 @@ public class WindowView extends javax.swing.JFrame {
     public void tankShoot(int type) { 
         shipBullets = new Thread(game);
         if (game.getTanque().getTank().getShoot().getY() == game.getTanque().getTank().getY()) {//solo dispara si el disparo ya esta en el tanque
-            game.setOperation(3);
+            game.setOperation(2);
             game.setTypeShoot(type);
             shipBullets.start();
         }
@@ -476,7 +476,7 @@ public class WindowView extends javax.swing.JFrame {
      * @param size cantidad de disparos por ronda de los invasores
      */
     public void invadersShoot(int size) {
-        game.setOperation(5);
+        game.setOperation(4);
         aliensBullets = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             aliensBullets.add(new Thread(game));
@@ -490,11 +490,11 @@ public class WindowView extends javax.swing.JFrame {
      */
     public void invadersrMove() {
        
-        game.setOperation(4);
+        game.setOperation(3);
         aliens = new Thread(game);
-         if (moveAliens == false) {
-        aliens.start();
-        moveAliens = true;
+        if (moveAliens == false) {
+            aliens.start();
+            moveAliens = true;
         }
     }
     
