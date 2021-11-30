@@ -13,8 +13,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
@@ -27,9 +25,6 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     
     //ThreadController
-    private int interval;
-    private AtomicBoolean running = new AtomicBoolean(false);
-    private AtomicBoolean stopped = new AtomicBoolean(true);
     
     private FleetController invasores;//invasores
     private ShipController tanque; //tanque
@@ -41,7 +36,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     
     private int incrementRefreshRate=800;//incremento de velocidad por ronda
     //Vista del jugador
-    private boolean[] visual = new boolean[5];
+    private boolean[] visualElements = new boolean[4];
 //____________________________________________________________________
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -72,11 +67,10 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     public void visible(){
                 //control de la partes visuales en la interfaz
-        visual[0] = true;//mostrar las naves
-        visual[1] = true;//mostrar balas de las naves
-        visual[2] = true;//mostrar el tanque
-        visual[3] = true;//mostrar la balas de tanque
-        visual[4] = false;//mostrar las barreras de defensa 
+        visualElements[0] = true;//mostrar las naves
+        visualElements[1] = true;//mostrar balas de las naves
+        visualElements[2] = true;//mostrar el tanque
+        visualElements[3] = true;//mostrar la balas de tanque
     }
     
     //Creación de niveles
@@ -130,7 +124,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             disparo = tanque.shoot(invasores.getGroupInvader());
            
              if (disparo == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
-                 visual[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
+                 visualElements[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
                  repaint();
                  try {Thread.sleep(500);} catch (Exception e) {}//demora de bala retornando
                 tanque.getTank().returnShoot();//retorna la bala    
@@ -145,7 +139,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
                 break;
             }
         repaint();
-            visual[3]=true;
+            visualElements[3]=true;
         }
        
         
@@ -231,12 +225,28 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      * destina el game over de la partida usando el metodo / viewGame.stop()/dentro de ViewGame
      */
     public void dead(){
-        viewGame.stop();
+        viewGame.endCurrentGame();
     }
 //------------------GetSetters----------------------------------------
     
-    public void setSleepInterval(int interval){
-        this.interval = interval;
+    /**
+     * Returns the value of whether an element is being displayed.
+     * [0] show aliens
+     * [1] show alien bullets
+     * [2] show player's ship
+     * [3] show player's ship bullets
+     * 
+     * @param index array position.
+     * @return The boolean value at position index.
+     */
+    public boolean getVisualElementsValue(int index){
+        boolean value = false;
+        if(index < this.visualElements.length && index > -1){
+            value = this.visualElements[index];
+        } else {
+            System.out.println("ActionScreenView class: setVisualElements(index) index is out of bounds. Array size: "+this.visualElements.length);
+        }
+        return value;
     }
     
     /**
@@ -317,6 +327,23 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     public void setOperation(int operation) {
         this.operation = operation;
     }
+    
+    /**
+     * Turns on or off elements from this panel.
+     * [0] show aliens
+     * [1] show alien bullets
+     * [2] show player's ship
+     * [3] show player's ship bullets
+     * 
+     * @param index array position.
+     */
+    public void setVisualElements(int index, boolean set){
+        if(index < this.visualElements.length && index > -1){
+            this.visualElements[index] = set;
+        } else {
+            System.out.println("ActionScreenView class: setVisualElements(index) index is out of bounds. Array size: "+this.visualElements.length);
+        }
+    }
 
     
 //-------------------Override-----------------------------------------
@@ -328,7 +355,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
         float[] color = Color.RGBtoHSB(0,255,7, null);
         imgComplete.setColor(Color.getHSBColor(color[0], color[1], color[2]));
         //--------------ver naves---------------------------------
-        if (visual[0] == true) {
+        if (visualElements[0] == true) {
             for (int i = 0; i < invasores.getGroupInvader().getInvaders().size(); i++) {
                 for (int j = 0; j < invasores.getGroupInvader().getInvaders().get(i).getShape().size(); j++) {
                     if (typeShoot == 1) {//si es el super disparo
@@ -339,7 +366,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
                     imgComplete.fill(invasor);
                 }
                 //---------------ver disparos de naves----------------------------------
-                if (visual[1] == true) {
+                if (visualElements[1] == true) {
                     try {//solo si existe disparo
                         Rectangle2D invasorShoot = invasores.getGroupInvader().getInvaders().get(i).getShoot().getShape().get(0);
                         imgComplete.fill(invasorShoot);
@@ -349,14 +376,14 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             }
         }
         //------------------ver tanque---------------------------
-        if (visual[2] == true) {
+        if (visualElements[2] == true) {
             for (int i = 0; i < tanque.getTank().getShape().size(); i++) {
                 Rectangle2D tank = tanque.getTank().getShape().get(i);
                 imgComplete.fill(tank);
             }
         }
         //----------------ver disparo del tanque-------------------------------
-        if (visual[3] == true) {
+        if (visualElements[3] == true) {
             for (int i = 0; i < tanque.getTank().getShoot().getShape().size(); i++) {
                  Rectangle2D tankShoot = tanque.getTank().getShoot().getShape().get(i);
                  if (typeShoot == 1) {//si es el super disparo

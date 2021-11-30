@@ -359,7 +359,7 @@ public class WindowView extends javax.swing.JFrame {
     /**
      * permite parar el juego y reiniciar los puntos del usuario(gameOver)
      */
-    public void stop() {
+    public void endCurrentGame() {
         dead = 1;//game over
         //resetea al usuario y lo hubica en el ranking
         if (game.getTanque().getTank().getY()!=game.getTanque().getTank().getShoot().getY()) {
