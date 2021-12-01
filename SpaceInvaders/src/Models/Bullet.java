@@ -5,20 +5,30 @@
  */
 package Models;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 
 /**
  * Bloque con los atributos y métodos de la clase Shoot (Disparo)
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Bullet extends GameObject {
+public class Bullet extends GraphicsObject {
         
     private long refreshRate; 
+    
+    final float[] colorSelect = Color.RGBtoHSB(0,255,7, null);
+    final Color defaultColor = Color.getHSBColor(colorSelect[0], colorSelect[1], colorSelect[2]);
  //-----------------Constructor----------------------------------------
+    public Bullet(){
+        
+    }
+    
     /**
      * constructor null de shoot
      */
-    public Bullet() {
+    public Bullet(int x, int y, int width, int height) {
+        super(x, y, 0);
+        addShape(x, y, width, height);
     }
    /**
    * Crea un disparo agregando su posición y tamaño de una vez
@@ -96,14 +106,14 @@ public class Bullet extends GameObject {
      *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que steps es menor igual que 0
      */
      public boolean moveUpFast() {
-        for (Rectangle2D shape : getShape()) {//buscar en cada forma de el disparo
+        for (Rectangle2D shape : getShapes()) {//buscar en cada forma de el disparo
             if (((shape.getY()-getSpeed())<=getLimitUp()) || getSpeed()<=0) {//si no se pasa del limite
                 return false;//si pasa ya no se puede mover para arriba
             }
         }
         //si puede ir arriba mover todas las formas faltantes
         try {Thread.sleep(refreshRate); } catch (Exception e) { System.out.println("error mover derecha"+e);}   
-        for (Rectangle2D shape : getShape()) {
+        for (Rectangle2D shape : getShapes()) {
             shape.setRect(shape.getX(),
                     (shape.getY()-getSpeed()),
                     shape.getWidth(),
@@ -118,14 +128,14 @@ public class Bullet extends GameObject {
      *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que steps es menor igual que 0
      */
      public boolean moveUpMedium() {
-        for (Rectangle2D shape : getShape()) {//buscar en cada forma de el disparo
+        for (Rectangle2D shape : getShapes()) {//buscar en cada forma de el disparo
             if (((shape.getY()-getSpeed())<=getLimitUp()) || getSpeed()<=0) {//si no se pasa del limite
                 return false;//si pasa ya no se puede mover para arriba
             }
         }
         //si puede ir arriba mover todas las formas faltantes
         try {Thread.sleep(refreshRate+(refreshRate)); } catch (Exception e) { System.out.println("error mover derecha"+e);}   
-        for (Rectangle2D shape : getShape()) {
+        for (Rectangle2D shape : getShapes()) {
             shape.setRect(shape.getX(),
                     (shape.getY()-getSpeed()),
                     shape.getWidth(),
@@ -141,13 +151,13 @@ public class Bullet extends GameObject {
       *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que steps es menor igual que 0
       */
      public boolean moveDownFast(){
-         for (Rectangle2D shape : getShape()) {
+         for (Rectangle2D shape : getShapes()) {
              if (((shape.getMaxY()+getSpeed())>=getLimitDown()) || getSpeed()<=0) {//si el paso a dar no se puede 
              return false;
             }
          }
          try {Thread.sleep(refreshRate); } catch (Exception e) { System.out.println("error mover derecha"+e);}    
-        for (Rectangle2D shape : getShape()) {
+        for (Rectangle2D shape : getShapes()) {
             shape.setRect(shape.getX(), 
                           (shape.getY()+getSpeed()),
                           shape.getWidth(),

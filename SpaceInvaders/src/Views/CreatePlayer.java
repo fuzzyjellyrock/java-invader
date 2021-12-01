@@ -62,7 +62,7 @@ public class CreatePlayer extends javax.swing.JDialog {
         lblWindowTitle.setText("CREATE PLAYER");
 
         buttonCreatePlayer.setBackground(new java.awt.Color(0, 0, 0));
-        buttonCreatePlayer.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
+        buttonCreatePlayer.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         buttonCreatePlayer.setForeground(new java.awt.Color(255, 255, 255));
         buttonCreatePlayer.setText("PLAY");
         buttonCreatePlayer.addActionListener(new java.awt.event.ActionListener() {

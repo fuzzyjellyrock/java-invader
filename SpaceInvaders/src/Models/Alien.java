@@ -5,13 +5,18 @@
  */
 package Models;
 
+import java.util.ArrayList;
+
 /**
  * Bloque con los atributos y métodos de la clase Invader
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Alien extends GameObject {
+public class Alien extends GraphicsObject {
 
-    private Bullet shoot;
+    private Bullet bullet;
+    private int bulletSpeed = 7;
+    private int bulletRefreshRate;
+    
     private boolean dead  = false;
 
 //-----------------Constructor-----------------------------------------
@@ -32,12 +37,11 @@ public class Alien extends GameObject {
      * @param speedBullet velocidad de la bala del invader
      * @param refreshShoot fps de el invasor
      */
-    public Alien(int x, int y, int width, int height, int speed, int speedBullet, long refreshShoot) {
+    public Alien(int x, int y, int width, int height, int speed, long refreshShoot) {
         super(x, y, speed);
-        
 
         //creacion de la bala 
-        shoot = new Bullet((int) ((width / 2) + x - 1), y, 3, 5, speedBullet, refreshShoot);
+        bullet = new Bullet((int) ((width / 2) + x - 1), y, 3, 5, bulletSpeed, refreshShoot);
     }
     //------------------Methods-------------------------------------------
     //movimiento de el invasor
@@ -48,8 +52,8 @@ public class Alien extends GameObject {
      */
     public boolean moveLeftWithShoot() {
         if (moveLeft()) {
-            if (getY() == shoot.getY()) {
-                shoot.moveLeftWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala    
+            if (getY() == bullet.getY()) {
+                bullet.moveLeftWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala    
             }
             return true;
         } else {
@@ -63,8 +67,8 @@ public class Alien extends GameObject {
      */
     public boolean moveRightWithShoot() {
         if (moveRight()) {
-            if (getY() == shoot.getY()) {
-                shoot.moveRightWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala
+            if (getY() == bullet.getY()) {
+                bullet.moveRightWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala
             }
             return true;
         } else {
@@ -80,8 +84,8 @@ public class Alien extends GameObject {
     public boolean moveDownWithShoot() {
 
         if (moveDown()) {
-            if (getY() - getSpeed() == shoot.getY()) {
-                shoot.moveDownWithSpeed(getSpeed());//debe mover la bala no a la velocidad de la bala, sino a la velocidad del invasor
+            if (getY() - getSpeed() == bullet.getY()) {
+                bullet.moveDownWithSpeed(getSpeed());//debe mover la bala no a la velocidad de la bala, sino a la velocidad del invasor
             }
             return true;
         } else {
@@ -111,9 +115,9 @@ public class Alien extends GameObject {
         retora -1 elimina invasor
          */
         try {
-           if (shoot.moveDownFast() == true) {//si la bala puede bajar
+           if (bullet.moveDownFast() == true) {//si la bala puede bajar
              //_________________
-            if (enemy.collisionDetection(shoot.getShape().get(0)) ) {//si detecta colisión con el tanque o si detecta colisión con un muro
+            if (enemy.collisionDetection(bullet.getShapes().get(0)) ) {//si detecta colisión con el tanque o si detecta colisión con un muro
                 // System.out.println("Hubo colision tanque");
                  removeOrMoveShoot();//elimina el invasor si la bala no sigue, pero si bala sigue eliminia al invader cuando la bala colisione
                 return 1;//le dio a tanque
@@ -141,12 +145,12 @@ public class Alien extends GameObject {
      */
     public int removeOrMoveShoot() {
         
-        if (getShape().size() == 0) {//si no tiene forma el invasor, elimina todo de este invasor ya..
+        if (getShapes().size() == 0) {//si no tiene forma el invasor, elimina todo de este invasor ya..
             removeAllShape();
             return -1;
         } else {//si el invasor tiene forma, retornalo a su forma inicial
-            shoot.setXComplete((int) ((getShape().get(0).getWidth() / 2) + getShape().get(0).getX() - 1));
-            shoot.setYComplete((int) getShape().get(0).getY());
+            bullet.setXComplete((int) ((getShapes().get(0).getWidth() / 2) + getShapes().get(0).getX() - 1));
+            bullet.setYComplete((int) getShapes().get(0).getY());
             return 1;
         }
 
@@ -156,7 +160,7 @@ public class Alien extends GameObject {
      */
     public void removeAllShape(){
         removeShapes();
-        shoot.removeShapes();
+        bullet.removeShapes();
         dead = true;
     }
     /**
@@ -168,21 +172,26 @@ public class Alien extends GameObject {
     }
 
     //------------------GetSetters----------------------------------------
+    
+    public ArrayList getBulletShape() {
+        return bullet.getShapes();
+    }
+    
     /**
      * Obtener la clase de disparo del invasor
      *
      * @return Shoot(shoot)
      */
-    public Bullet getShoot() {
-        return shoot;
+    public Bullet getBullet() {
+        return bullet;
     }
     /**
      * Determina el disparo de la clase Shoot
      *
-     * @param shoot destinado a el invasor
+     * @param bullet destinado a el invasor
      */
-    public void setShoot(Bullet shoot) {
-        this.shoot = shoot;
+    public void setBullet(Bullet bullet) {
+        this.bullet = bullet;
     }
     /**
      * Retorna si un invasor esta muerto o no
@@ -204,7 +213,35 @@ public class Alien extends GameObject {
     @Override
     public String toString() {
         return "\n---------Posicion-------------" + super.toString()
-                + shoot;
+                + bullet;
+    }
+
+    /**
+     * @return the bulletSpeed
+     */
+    public int getBulletSpeed() {
+        return bulletSpeed;
+    }
+
+    /**
+     * @param bulletSpeed the bulletSpeed to set
+     */
+    public void setBulletSpeed(int bulletSpeed) {
+        this.bulletSpeed = bulletSpeed;
+    }
+
+    /**
+     * @return the bulletRefreshRate
+     */
+    public int getBulletRefreshRate() {
+        return bulletRefreshRate;
+    }
+
+    /**
+     * @param bulletRefreshRate the bulletRefreshRate to set
+     */
+    public void setBulletRefreshRate(int bulletRefreshRate) {
+        this.bulletRefreshRate = bulletRefreshRate;
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package Models;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -12,12 +13,14 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Position
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class GameObject {
+public class GraphicsObject {
     private int speed;
     private int x;
     private int y;
     //forma o imagen del objeto
     private ArrayList<Rectangle2D> shapes;
+    private Color color;
+    
     //limites del campo de juego
     private int limitLeft = 20;
     private int limitRight = 630;
@@ -28,14 +31,14 @@ public class GameObject {
     /**
      * constructor position null
      */
-    public GameObject() {
+    public GraphicsObject() {
     }
     /**
      * Constructor position con parametros completos
      * @param x ubicacion principal en el eje c de la position
      * @param y ubicacion principal en el eje y de la position
      */
-    public GameObject(int x, int y, int speed) {
+    public GraphicsObject(int x, int y, int speed) {
         this.speed = speed;
         this.x = x;
         this.y = y;
@@ -363,7 +366,7 @@ public class GameObject {
      * Retorna las formas del objeto
      * @return ArrayList(Rectangulo)
      */
-    public ArrayList<Rectangle2D> getShape() {
+    public ArrayList<Rectangle2D> getShapes() {
         return shapes;
     }
     /**
@@ -381,6 +384,20 @@ public class GameObject {
                 +"\n----------imagen del objeto-----------"+showShape()+"\n\n"
                 ;
                 
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @param color the color to set
+     */
+    public void setColor(Color color) {
+        this.color = color;
     }
     
     

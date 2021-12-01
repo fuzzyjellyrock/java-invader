@@ -10,8 +10,6 @@ import Controllers.PlayerController;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 /**
  * Este bloque es la interfaz principal del videojuego basado SpaceInvaders
  *
@@ -24,7 +22,7 @@ public class WindowView extends javax.swing.JFrame {
     private void initComponents() {
 
         game = new Views.ActionScreenView();
-        gameBar1 = new Views.PlayerStatusBarView(game.getTanque());
+        gameStatusBar = new Views.PlayerStatusBarView(game.getTanque());
         lblShields = new javax.swing.JLabel();
         lblMissiles = new javax.swing.JLabel();
         buttonNewGame = new javax.swing.JButton();
@@ -61,8 +59,8 @@ public class WindowView extends javax.swing.JFrame {
             .addGap(0, 503, Short.MAX_VALUE)
         );
 
-        gameBar1.setBackground(new java.awt.Color(0, 0, 0));
-        gameBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 7)));
+        gameStatusBar.setBackground(new java.awt.Color(0, 0, 0));
+        gameStatusBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 255, 7)));
 
         lblShields.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         lblShields.setForeground(new java.awt.Color(255, 255, 255));
@@ -72,29 +70,29 @@ public class WindowView extends javax.swing.JFrame {
         lblMissiles.setForeground(new java.awt.Color(255, 255, 255));
         lblMissiles.setText("MISSILES");
 
-        javax.swing.GroupLayout gameBar1Layout = new javax.swing.GroupLayout(gameBar1);
-        gameBar1.setLayout(gameBar1Layout);
-        gameBar1Layout.setHorizontalGroup(
-            gameBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gameBar1Layout.createSequentialGroup()
+        javax.swing.GroupLayout gameStatusBarLayout = new javax.swing.GroupLayout(gameStatusBar);
+        gameStatusBar.setLayout(gameStatusBarLayout);
+        gameStatusBarLayout.setHorizontalGroup(
+            gameStatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gameStatusBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblShields)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 460, Short.MAX_VALUE)
                 .addComponent(lblMissiles)
                 .addContainerGap())
         );
-        gameBar1Layout.setVerticalGroup(
-            gameBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gameBar1Layout.createSequentialGroup()
+        gameStatusBarLayout.setVerticalGroup(
+            gameStatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gameStatusBarLayout.createSequentialGroup()
                 .addContainerGap(38, Short.MAX_VALUE)
-                .addGroup(gameBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(gameStatusBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblShields, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblMissiles, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         buttonNewGame.setBackground(new java.awt.Color(0, 0, 0));
-        buttonNewGame.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
+        buttonNewGame.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         buttonNewGame.setForeground(new java.awt.Color(255, 255, 255));
         buttonNewGame.setText("NEW GAME");
         buttonNewGame.addActionListener(new java.awt.event.ActionListener() {
@@ -104,7 +102,7 @@ public class WindowView extends javax.swing.JFrame {
         });
 
         buttonShowLeaderboard.setBackground(new java.awt.Color(0, 0, 0));
-        buttonShowLeaderboard.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
+        buttonShowLeaderboard.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         buttonShowLeaderboard.setForeground(new java.awt.Color(255, 255, 255));
         buttonShowLeaderboard.setText("LEADERBOARD");
         buttonShowLeaderboard.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +178,7 @@ public class WindowView extends javax.swing.JFrame {
         );
 
         buttonCreatePlayer.setBackground(new java.awt.Color(0, 0, 0));
-        buttonCreatePlayer.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
+        buttonCreatePlayer.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         buttonCreatePlayer.setForeground(new java.awt.Color(255, 255, 255));
         buttonCreatePlayer.setText("CREATE PLAYER");
         buttonCreatePlayer.addActionListener(new java.awt.event.ActionListener() {
@@ -189,6 +187,7 @@ public class WindowView extends javax.swing.JFrame {
             }
         });
 
+        lblWindowTitle.setBackground(new java.awt.Color(255, 255, 255));
         lblWindowTitle.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         lblWindowTitle.setForeground(new java.awt.Color(255, 204, 51));
         lblWindowTitle.setText("SPACE INVADERS");
@@ -203,9 +202,10 @@ public class WindowView extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(panelPlayerStats, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(gameBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gameStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(game, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
                                 .addComponent(buttonCreatePlayer)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(buttonNewGame, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,7 +231,7 @@ public class WindowView extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(game, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gameBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gameStatusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -363,6 +363,8 @@ public class WindowView extends javax.swing.JFrame {
      * @param evt evento del boton
      */
     private void buttonNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
+        game.setWon(false);
+        game.setLost(false);
         if(!this.playerCon.getPlayerLevel().equals("0")){
             this.playerCon = new PlayerController(this.playerCon.getPlayerName());
         }
@@ -383,6 +385,7 @@ public class WindowView extends javax.swing.JFrame {
         buttonCreatePlayer.setFocusable(false);
         buttonShowLeaderboard.setFocusable(false);
         game.setFocusable(true);
+        
     }//GEN-LAST:event_buttonShowLeaderboardActionPerformed
 
     private void buttonCreatePlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCreatePlayerActionPerformed
@@ -406,11 +409,11 @@ public class WindowView extends javax.swing.JFrame {
      */
     public void endCurrentGame() {
         dead = 1;//game over
+        game.setLost(true);
         //resetea al usuario y lo hubica en el ranking
-        if (game.getTanque().getTank().getY()!=game.getTanque().getTank().getShoot().getY()) {
+        if (game.getTanque().getShip().getY()!=game.getTanque().getShip().getBullet().getY()) {
             shipBullets.interrupt();
         }
-        JOptionPane.showMessageDialog(null, "Game Over");
         this.lbCon.addNewScore(playerCon.getPlayer());
         playerCon.resetPoints();
         showHighScore();
@@ -446,7 +449,7 @@ public class WindowView extends javax.swing.JFrame {
           //si el usurio paso de nivel y mato todas las naves
         if (playerCon.getPlayer().getLvl() != 1 ||  dead == 0) {//apaga las acciones si paso de nivel
             playerCon.addPoints(20);
-            JOptionPane.showMessageDialog(null, "¡siguiente nivel!");
+            game.setWon(true);
             stopThread();
         }else{//activar primer nivel
             game.setRefreshRate(800);
@@ -476,9 +479,9 @@ public class WindowView extends javax.swing.JFrame {
         game.repaint();
 
        //recreamos el gameBar
-        gameBar1.setTanque(game.getTanque());
-        gameBar1.repaint();
-        game.setConsumiblesTanque(gameBar1);
+        gameStatusBar.setTanque(game.getTanque());
+        gameStatusBar.repaint();
+        game.setStatusBar(gameStatusBar);
         game.setViewGame(this);
         
         //dependiendo el nivel activa unos hilos diferentes
@@ -508,7 +511,7 @@ public class WindowView extends javax.swing.JFrame {
      */
     public void tankShoot(int type) { 
         shipBullets = new Thread(game);
-        if (game.getTanque().getTank().getShoot().getY() == game.getTanque().getTank().getY()) {//solo dispara si el disparo ya esta en el tanque
+        if (game.getTanque().getShip().getBullet().getY() == game.getTanque().getShip().getY()) {//solo dispara si el disparo ya esta en el tanque
             game.setOperation(2);
             game.setTypeShoot(type);
             shipBullets.start();
@@ -537,7 +540,7 @@ public class WindowView extends javax.swing.JFrame {
        
         game.setOperation(3);
         aliens = new Thread(game);
-        System.out.println("moveAliens: "+moveAliens);
+        //System.out.println("moveAliens: "+moveAliens);
         if (moveAliens == false) {
             aliens.start();
             moveAliens = true;
@@ -570,11 +573,11 @@ public class WindowView extends javax.swing.JFrame {
     public int getRound() {
         return round;
     }
-    public PlayerController getUser() {
+    public PlayerController getPlayer() {
         return playerCon;
     }
-    public void setUser(PlayerController user) {
-        this.setPlayerCon(user);
+    public void setUser(PlayerController player) {
+        this.setPlayerCon(player);
     }
     public int getDead() {
         return dead;
@@ -632,7 +635,7 @@ public class WindowView extends javax.swing.JFrame {
     private javax.swing.JButton buttonNewGame;
     private javax.swing.JButton buttonShowLeaderboard;
     private Views.ActionScreenView game;
-    private Views.PlayerStatusBarView gameBar1;
+    private Views.PlayerStatusBarView gameStatusBar;
     private javax.swing.JLabel lblCurrentLevel;
     private javax.swing.JLabel lblCurrentLevelTitle;
     private javax.swing.JLabel lblCurrentScore;

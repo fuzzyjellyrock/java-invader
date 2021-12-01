@@ -5,6 +5,7 @@
  */
 package Models;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -26,6 +27,12 @@ public class Fleet {
     private int row;
     //columbas
     private int column;
+    
+    //Fleet color
+    //Normal color
+    private Color color;
+    //Color when attacked by missile.
+    private Color secondColor;
 
 //-----------------Constructor----------------------------------------
     /**
@@ -34,6 +41,9 @@ public class Fleet {
     public Fleet() {
         xInicial = 0;
         yInicial = 0;
+        
+        this.color = Color.WHITE;
+        this.secondColor = Color.RED;
     }
 
    /**
@@ -53,6 +63,9 @@ public class Fleet {
         this.groupSpeed = speed;
         this.refreshRate = refreshRateInvaders;
         invaders = new ArrayList<>();
+        
+        this.color = Color.WHITE;
+        this.secondColor = Color.RED;
     }
     //------------------Methods------------------------------------------
     
@@ -66,7 +79,7 @@ public class Fleet {
  * @param speedBullet velocidad de la bala de los invasores
  * @param refreshBullet tasa de refresco de las balas
  */
-    public void addGroupInvader(int widthInvader,int heightInvader,int spaceBetweenInvaders,int speedBullet,long refreshBullet) {
+    public void addGroupInvader(int widthInvader,int heightInvader,int spaceBetweenInvaders,long refreshBullet) {
         invaders = new ArrayList<>();
         int inicioX = xInicial;//el inicio donde estaran todas las naves y donde seran colocadas en el eje x
         int inicioY = yInicial;//el inicio donde estaran todas las naves y donde seran colocadas en el eje y
@@ -75,7 +88,7 @@ public class Fleet {
         int emptySpace = spaceBetweenInvaders;//espacio entre las naves
         for (int f = 0; f < row; f++) {//filas de la naves
             for (int c = 0; c < column; c++) {//columnas de las naves
-                addInvader(inicioX, inicioY, width, height, groupSpeed , speedBullet ,refreshBullet);
+                addInvader(inicioX, inicioY, width, height, groupSpeed,refreshBullet);
                 inicioX += width + emptySpace;  //sumar espacio entre ellos - punto de inicio - y anchura de las naves 
             }
             inicioX = xInicial;//reinicia el x para la siguiente ilera de invasores
@@ -95,7 +108,7 @@ public class Fleet {
         int inicioY = yInicial;//el inicio donde estaran todas las naves y donde seran colocadas en el eje y
         //primera capa
         for (int f = 0; f < 20; f++) {
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed , speedBullet ,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
              inicioX += widthInvader;
         }
        inicioX = xInicial;
@@ -109,14 +122,14 @@ public class Fleet {
                  inicioX -= widthInvader;
                 inicioY+=heightInvader;
             }
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed , speedBullet ,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
              inicioX += widthInvader;
         }
         inicioX = xInicial;
          inicioY+= heightInvader;
        //segunda y tercera capa
         for (int f = 0; f < 14; f++) {
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed , speedBullet ,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
              inicioX += widthInvader;
                if (f==4) {
                 inicioX += 3*widthInvader;
@@ -129,8 +142,8 @@ public class Fleet {
         addShapeInvaders(-5, heightInvader, 20, 8);
         inicioY += heightInvader;
         inicioX = ((inicioX/2)-30)+xInicial;
-        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed , speedBullet ,refreshBullet);
-        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed , speedBullet ,refreshBullet);
+        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet);
+        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet);
 
     }
     /**
@@ -160,9 +173,9 @@ public class Fleet {
      * @param width anchura del invasor
      * @param height altura del invasor
      */
-    public void addInvader(int x, int y, int width, int height, int speed, int speedBullet, long refreshShoot) {
+    public void addInvader(int x, int y, int width, int height, int speed, long refreshShoot) {
         //creacion del invader junto con la bala y su velocidad
-        Alien aux = new Alien(x, y, width, height, speed, speedBullet, refreshShoot);
+        Alien aux = new Alien(x, y, width, height, speed, refreshShoot);
         //creacion de formas de los enemigos
         aux.addShape(x, y, width, height); //forma primario del rectangulo
         aux.addShape(x-((width/4)+1), y+(height), (width/4)+1, 7);
@@ -299,7 +312,7 @@ public class Fleet {
      * @param i invader al cual se quiere eliminar
      */
     public void removeInvasorShape(int i){
-        if ( invaders.get(i).getY()==invaders.get(i).getShoot().getY()) {
+        if ( invaders.get(i).getY()==invaders.get(i).getBullet().getY()) {
             invaders.get(i).removeAllShape();
         }else{
             invaders.get(i).removeOnlyShip();
@@ -434,15 +447,44 @@ public class Fleet {
      * @return Shoot(disparo del invasor)
      */
     public Bullet getShootOfInvader(int index){
-        return invaders.get(index).getShoot();
+        return invaders.get(index).getBullet();
     }
-
+    
+    public int getAliensListSize(){
+        return this.invaders.size();
+    }
+    
+    public ArrayList<Rectangle2D> getAlienBulletShape(int index){
+        return this.invaders.get(index).getBullet().getShapes();
+    }
+    
+    public ArrayList<Rectangle2D> getAlienShapes(int index){
+        ArrayList<Rectangle2D> shapes = null;
+        if(index < this.invaders.size() && index > -1){
+            shapes = this.invaders.get(index).getShapes();
+        }
+        return shapes;
+    }
 
 //-------------------Override-----------------------------------------
     @Override
     public String toString() {
         return "\nVelocidad grupal: " + groupSpeed
                 + showInvasors();
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @return the secondColor
+     */
+    public Color getSecondColor() {
+        return secondColor;
     }
 
 }

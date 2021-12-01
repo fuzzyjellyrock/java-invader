@@ -5,9 +5,12 @@
  */
 package Controllers;
 
+import Models.Bullet;
 import Models.Ship;
-import Models.PlayerShip;
 import Models.Fleet;
+import java.awt.Color;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Controlador para el tanque
@@ -15,16 +18,9 @@ import Models.Fleet;
  */
 public class ShipController {
         
-    private Ship tank;
+    private Ship ship;
     
  //-----------------Constructor---------------------------------------
-    
-    /**
-     * constructor null de tank
-     */
-     public ShipController() {
-        tank = new Ship();
-    }
     /**
     * 
     * Crea un tanque con su forma principal (addShape) y crea el disparo con su tasa de movimiento
@@ -36,8 +32,8 @@ public class ShipController {
     * @param speedBullet velocidad de  bala del tanqeu
     * @param refreshShoot fps de bala del tanque
     */
-    public ShipController(int x, int y, int width, int height, int speed,int speedBullet, long  refreshShoot) {
-        this.tank = new Ship(x, y, width, height, speed, speedBullet, refreshShoot);
+    public ShipController(int x, int y, int speed) {
+        this.ship = new Ship(x, y, speed);
     }
     
     //------------------Methods-------------------------------------------
@@ -48,14 +44,14 @@ public class ShipController {
      * @param Steps pasos a dar a la izquierda
      */
     public void moveLeftWithShoot(){
-        tank.moveLeftWithShoot();
+        ship.moveLeftWithShoot();
     }
     /**
      * mueve para la derecha el tanque y el disparo
      * @param Steps pasos a dar a la derecha
      */
     public void moveRightWithShoot(){
-        tank.moveRightWithShoot();
+        ship.moveRightWithShoot();
     }
     //disparar
     /**
@@ -63,7 +59,7 @@ public class ShipController {
      * @param enemy grupo de enemigos a los cuales les afecta el disparo
      */
     public int shoot(Fleet enemy){
-       return tank.shoot(enemy);
+       return ship.shoot(enemy);
     }
     /**
      * dispara una bala con menos velocidad y solo retorna si llega al limite 
@@ -74,32 +70,83 @@ public class ShipController {
      *         <br></b>1</b> si le dio a un muro
      *         <br></b>2</b> si llego al limite superiro(position/limitUp)
     */
-    public int SuperShoot(Fleet enemy){
-     return tank.SuperShoot(enemy);
-      }
+    public int launchMissile(Fleet enemy){
+     return ship.launchMissile(enemy);
+    }
+    
+    public void createLifes(int level){
+        this.ship.setShipHealth(level);
+        this.ship.addLivesShapes();
+    }
+    
+    public void createMissiles(int level){
+        this.ship.setShipMissiles(level);
+        this.ship.addMissiles();
+    }
+    
+    public boolean removeLive(){
+        return this.ship.removeLive();
+    }
+    
+    public boolean removeMissile(){
+        return this.ship.removeMissile();
+    }
+    
+    public void createDestroyMissile(int operation){
+        this.ship.createDestroyMissile(operation);
+    }
     
     //------------------GetSetters----------------------------------------
+    
+    public Color getBulletsColor(){
+        return this.ship.getColor();
+    }
+    
+    public ArrayList<Rectangle2D> getBulletShapes(){
+        return this.ship.getBulletShapes();
+    }
+    
+    public Color getShipColor() {
+        return ship.getColor();
+    }
+    
+    public ArrayList<Rectangle2D> getPlayerShipShapes(){
+        return this.ship.getShapes();
+    }
     
     /**
      * retorna el tanque(model.Tank/tank) utilizado en el controlador
      * @return Tank(tank)
      */
-    public Ship getTank() {
-        return tank;
+    public Ship getShip() {
+        return ship;
     }
     /**
      * destina el tanque utilizado en el controlador
-     * @param tank  destinado al objeto
+     * @param ship  destinado al objeto
      */
-    public void setTank(Ship tank) {
-        this.tank = tank;
+    public void setShip(Ship ship) {
+        this.ship = ship;
     }
-    /**
-     * retorna los consumbles de el tanque
-     * @return (Consumable)
-     */
-    public PlayerShip getConsumable(){
-        return tank.getConsumable();
+    
+    public ArrayList<Ship> getLives(){
+        return this.ship.getLives();
+    }
+    
+    public int getLivesCount(){
+        return this.ship.getLivesCount();
+    }
+    
+    public int getMissileCapacity(){
+        return this.ship.getMissilesCapacity();
+    }
+    
+    public int getLivesListSize(){
+        return this.ship.getLives().size();
+    }
+    
+    public ArrayList<Bullet> getMissiles(){
+        return this.ship.getMissiles();
     }
     
     //-------------------Override-----------------------------------------   

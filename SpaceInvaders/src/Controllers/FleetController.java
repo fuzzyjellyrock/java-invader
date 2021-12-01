@@ -8,6 +8,9 @@ package Controllers;
 import Models.Alien;
 import Models.Ship;
 import Models.Fleet;
+import java.awt.Color;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * Controlador para el grupo de invasores
@@ -15,14 +18,14 @@ import Models.Fleet;
  */
 public class FleetController {
 
-    private Fleet groupInvader;
+    private Fleet fleet;
 
     //-----------------Constructor----------------------------------------
     /**
      * constructor de GroupInvaders null
      */
     public FleetController() {
-        this.groupInvader = new Fleet();
+        this.fleet = new Fleet();
     }
     /**
      * constructor GroupInvaders Con parametro
@@ -37,7 +40,7 @@ public class FleetController {
      * @param refreshRateInvaders fps del grupo
      */
     public FleetController(int xInicial, int yInicial, int row, int column, int speed, int refreshRateInvaders) {
-        this.groupInvader = new Fleet(xInicial, yInicial, row, column, speed, refreshRateInvaders);
+        this.fleet = new Fleet(xInicial, yInicial, row, column, speed, refreshRateInvaders);
     }
     //------------------Methods------------------------------------------  
 
@@ -46,7 +49,7 @@ public class FleetController {
      * velocidad
      */
     public boolean moveGroupLeft() {
-        return groupInvader.moveGroupLeft();
+        return fleet.moveGroupLeft();
 
     }
     /**
@@ -54,14 +57,14 @@ public class FleetController {
      * velocidad
      */
     public boolean moveGroupRight() {
-        return groupInvader.moveGroupRight();
+        return fleet.moveGroupRight();
 
     }
     /**
      * mueve las naves gunto con sus disparos a para abajo de una manera unifome
      */
     public boolean moveGroupDown() {
-        return groupInvader.moveGroupDown();
+        return fleet.moveGroupDown();
 
     }
     /**
@@ -75,7 +78,7 @@ public class FleetController {
  * @param refreshBullet tasa de refresco de las balas
  */
     public void addGroupInvader(int widthInvader,int heightInvader,int spaceBetweenInvaders,int speedBullet,long refreshBullet) {
-        groupInvader.addGroupInvader(widthInvader, heightInvader, spaceBetweenInvaders, speedBullet, refreshBullet);
+        fleet.addGroupInvader(widthInvader, heightInvader, spaceBetweenInvaders, refreshBullet);
     }
     
     //--------------------------------------
@@ -84,7 +87,7 @@ public class FleetController {
      * determina cuando quedan menos invasore que velocidad tendran los invasores, solo se activa si el tanque le dio a un invasor
      */
     public void controlOfRefreshRate(){
-        groupInvader.controlOfRefreshRate();
+        fleet.controlOfRefreshRate();
     }
     /**
      * dispara aleatoriamente una bala de los invasores
@@ -92,7 +95,7 @@ public class FleetController {
      * @param enemy tanque enemigo al cual le puede afectar
      */
     public int randomShoot() {
-        return groupInvader.randomShoot();
+        return fleet.randomShoot();
     }
     /**
      * a partir de un index(invader) determina que invasor disparara
@@ -105,7 +108,7 @@ public class FleetController {
      * @see model.GroupOfInvaders/shoot()
      */
     public int shootInvader(int invader, Ship tank) {
-        return groupInvader.getInvaders().get(invader).shoot(tank);
+        return fleet.getInvaders().get(invader).shoot(tank);
     }
 
     //------------------GetSetters---------------------------------------
@@ -114,8 +117,29 @@ public class FleetController {
      *
      * @return groupInvader(groupOfInvaders)
      */
-    public Fleet getGroupInvader() {
-        return groupInvader;
+    
+    public int getAliensListSize(){
+        return this.fleet.getAliensListSize();
+    }
+    
+    public ArrayList<Rectangle2D> getAlienShapes(int index){
+        return this.fleet.getAlienShapes(index);
+    }
+    
+    public ArrayList<Rectangle2D> getAlienBulletShape(int index){
+        return this.fleet.getAlienBulletShape(index);
+    }
+    
+    public Color getFleetColor() {
+        return fleet.getColor();
+    }
+    
+    public Color getFleetSecondColor() {
+        return fleet.getSecondColor();
+    }
+    
+    public Fleet getFleet() {
+        return fleet;
     }
     /**
      * determina el grupo de invasores que usa el objeto
@@ -123,7 +147,7 @@ public class FleetController {
      * @param groupInvader destinado a la clase
      */
     public void setGroupInvader(Fleet groupInvader) {
-        this.groupInvader = groupInvader;
+        this.fleet = groupInvader;
     }
     /**
      * retorna un invasor dentro de groupOfInvaders dependiendo su index
@@ -131,13 +155,13 @@ public class FleetController {
      * @return Invader (model/Invader) invasor el cual se busca
      */
     public Alien getInvader(int invader) {
-        return groupInvader.getInvaders().get(invader);
+        return fleet.getInvaders().get(invader);
     }
     //-------------------Override-----------------------------------------
 
     @Override
     public String toString() {
-        return "" + groupInvader; //To change body of generated methods, choose Tools | Templates.
+        return "" + fleet; //To change body of generated methods, choose Tools | Templates.
     }
 
 }

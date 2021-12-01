@@ -8,10 +8,15 @@ package Views;
 
 import Controllers.FleetController;
 import Controllers.ShipController;
+import Models.Bullet;
+import Models.Ship;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
@@ -25,17 +30,33 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     
     //ThreadController
     
-    private FleetController invasores;//invasores
-    private ShipController tanque; //tanque
-    private PlayerStatusBarView consumiblesTanque; //barrera encargada de mostrar los consumibles
+    private FleetController fleet;//invasores
+    private ShipController shipCon; //tanque
+    private PlayerStatusBarView stats; //barrera encargada de mostrar los consumibles
     private WindowView viewGame;  //forma de controlar el jframe
    
-    private int typeShoot=0; //tipo de disparo del tanque
+    private int missile=0; //tipo de disparo del tanque
     private int operation = 0;//Operacion de los hilos
     
     private int incrementRefreshRate=800;//incremento de velocidad por ronda
+    
+    //Won or lost screen
+    boolean won = false;
+    boolean lost = false;
+    
     //Vista del jugador
     private boolean[] visualElements = new boolean[4];
+    
+    //Ship starting position
+    final int xInitShip = 300;
+    final int yInitShip = 485;
+    
+    //Status bar objects
+    final int catSeparator = 600;
+    final int xInitPostion = 18;
+    final int yInitPosition = 10;
+    final int itemSpaceSeparator = 20;
+    
 //____________________________________________________________________
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -58,8 +79,8 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     public ActionScreenView() {
         initComponents();
-        visible();
         lvl1();
+        visible();
     }
     /**
      * permite hacer visible todo el juego
@@ -72,44 +93,50 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
         visualElements[3] = true;//mostrar la balas de tanque
     }
     
+    public void initializeShip(int level){
+        this.shipCon = new ShipController(this.xInitShip, this.yInitShip, 0);
+        this.shipCon.createLifes(level);
+        this.shipCon.createMissiles(level);
+    }
+    
     //Creación de niveles
     /**
      * crea un nivel basico a partir de los parametros de los personajes
      */
     public void lvl1(){
-        
+        this.won = false;
+        this.lost = false;
         //invasores
-        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 8, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
-        invasores.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
+        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 8, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
+        fleet.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
         //tanque
-        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 15,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
-        tanque.getTank().addconsumable(3, 4, 18, 10, 600);
+        initializeShip(1);
     }
     /**
      * crea un nivel basico a partir de los parametros de los personajes
      */
     public void lvl2(){
               //Creacion de personajes
-        
+        this.won = false;
+        this.lost = false;
         //invasores
-        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 9, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
-        invasores.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
+        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 9, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
+        fleet.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
         //tanque
-        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
-        tanque.getTank().addconsumable(/*Vidas del tanque*/4,/*super disparos del tanque*/ 4, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
+        initializeShip(2);
     }
     /**
      * crea un nivel gefe (boss) a partir de los parametros de los personajes
      */
     public void lvl3(){
               //Creacion de personajes
-        
+        this.won = false;
+        this.lost = false;
         //invasores
-        invasores = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 10, /*columnas:*/ 10, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate-100);
-        invasores.getGroupInvader().addBoss(15, 12, 5, incrementRefreshRate/80);
+        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 10, /*columnas:*/ 10, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate-100);
+        fleet.getFleet().addBoss(15, 12, 5, incrementRefreshRate/80);
         //tanque
-        tanque = new ShipController(/*x:*/20,/*y:*/ 485, /*ancho:*/ 25,/*alto:*/ 10,/*velocidad:*/ 10,/*velocidad bala:*/ 7,/*fps bala:*/ 7);
-        tanque.getTank().addconsumable(/*Vidas del tanque*/5,/*super disparos del tanque*/ 9, /*posicion x dentro de gameBar*/18, /*posicion y dentro de gameBar*/10, /*espacio entre consumibles*/600);
+        initializeShip(3);
     }
 
 //------------------Methods-------------------------------------------
@@ -117,23 +144,23 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      * Dispara la bala del tanque y lo repinta por movimiento
      */
     public void tankShoot() {
-        int disparo = -1;
-        while (disparo == -1) {//mientras el disparo pueda seguir sin problemas
+        int shot = -1;
+        while (shot == -1) {//mientras el disparo pueda seguir sin problemas
             
-            disparo = tanque.shoot(invasores.getGroupInvader());
+            shot = shipCon.shoot(fleet.getFleet());
            
-             if (disparo == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
+             if (shot == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
                  visualElements[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
                  repaint();
                  try {Thread.sleep(500);} catch (Exception e) {}//demora de bala retornando
-                tanque.getTank().returnShoot();//retorna la bala    
+                shipCon.getShip().returnShoot();//retorna la bala    
             }
-                  if (disparo == 0) {
-                viewGame.getUser().addPoints(10);
+                  if (shot == 0) {
+                viewGame.getPlayer().addPoints(10);
                 viewGame.showCurrentScore();
                 
             }
-                   if (disparo == -2) {
+                   if (shot == -2) {
                 viewGame.callLvl();
                 break;
             }
@@ -148,14 +175,14 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     public void tankSuperShoot() {
         int disparo = -1;
-         if (tanque.getTank().getConsumable().removeSuperShoot()) {//solo si tiene disparos de sobra
-                consumiblesTanque.repaint();//eliminalo del la barra de consumibles
-            tanque.getTank().createOrDestroySuperShoot(1);//genera la forma de la bala
+         if (shipCon.removeMissile()) {//solo si tiene disparos de sobra
+                stats.repaint();//eliminalo del la barra de consumibles
+            shipCon.createDestroyMissile(1);//genera la forma de la bala
              while (disparo != 2) {//mientras el disparo pueda seguir sin problemas
-                 disparo = tanque.SuperShoot(invasores.getGroupInvader());//mueve el disparo
+                 disparo = shipCon.launchMissile(fleet.getFleet());//mueve el disparo
                 
                      if (disparo == 0) {
-                viewGame.getUser().addPoints(10);
+                viewGame.getPlayer().addPoints(10);
                 viewGame.showCurrentScore();
                 
                  }
@@ -165,10 +192,10 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             }
                  repaint();
              }
-           typeShoot = 0;
+           missile = 0;
            repaint();
-          tanque.getTank().createOrDestroySuperShoot(0);//regresa a la bala normal
-          tanque.getTank().returnShoot();//retorna la bala al tanque
+          shipCon.getShip().createDestroyMissile(0);//regresa a la bala normal
+          shipCon.getShip().returnShoot();//retorna la bala al tanque
 
          }
     }
@@ -177,17 +204,17 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      * Mueve los invasores de abajo, izquierda y derecha y por movimiento
      */
     public void moveInvaders() {
-        while (invasores.moveGroupDown()) {
+        while (fleet.moveGroupDown()) {
             repaint();
 //--------------------------------------------------------
-            while (invasores.moveGroupRight()) {
+            while (fleet.moveGroupRight()) {
                 repaint();    
             }
 //--------------------------------------------------------            
-            invasores.moveGroupDown();
+            fleet.moveGroupDown();
             repaint();
 //--------------------------------------------------------
-            while (invasores.moveGroupLeft()) {
+            while (fleet.moveGroupLeft()) {
                 repaint();
             }
         }
@@ -196,25 +223,25 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     /**
      * permite que los invasores disparen aleatoriamente solo si estan vivos
      */
-    public void invaderShoot() {
+    public void alienShoots() {
         //Posibilidad de disparo
-        int possibility = invasores.randomShoot();
+        int possibility = fleet.randomShoot();
         //velocidad de disparo por segundo
         try {Thread.sleep(100); } catch (Exception e) {}
-        if (possibility > -1 && (invasores.getInvader(possibility).getY()==invasores.getInvader(possibility).getShoot().getY())) {//si si existe la posibilidad y la bala se encuentra en el invasor
+        if (possibility > -1 && (fleet.getInvader(possibility).getY()==fleet.getInvader(possibility).getBullet().getY())) {//si si existe la posibilidad y la bala se encuentra en el invasor
             int aux = 0;//determina el camino del disparo
             int auxLvl=viewGame.getIncrementLvl();//determina si el tanque si ya paso de nivel, si es asi detiene la bala del invasor
             while (aux == 0) {//mientras el disparo no colisione
-                aux = invasores.shootInvader(possibility, tanque.getTank());//mueve la bala
+                aux = fleet.shootInvader(possibility, shipCon.getShip());//mueve la bala
                 repaint(); 
-                if (auxLvl!=viewGame.getIncrementLvl() && invasores.getGroupInvader().searchAlive()==0) {//para la bala de el invasor al terminar el nivel
+                if (auxLvl!=viewGame.getIncrementLvl() && fleet.getFleet().searchAlive()==0) {//para la bala de el invasor al terminar el nivel
                     break;
                 }
             }
           
             if (aux == 1) {
-                consumiblesTanque.repaint();
-                if (tanque.getConsumable().getlives().size()==0) {//game over(si le da al tanque y no tiene vidas)
+                stats.repaint();
+                if (shipCon.getLivesListSize()==0) {//game over(si le da al tanque y no tiene vidas)
                    dead();
                 }
             }
@@ -271,52 +298,52 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     }
     /**
      * destina los consumibles del tanque
-     * @param consumiblesTanque consumibles del tanque
+     * @param statusBar consumibles del tanque
      */
-    public void setConsumiblesTanque(PlayerStatusBarView consumiblesTanque) {
-        this.consumiblesTanque = consumiblesTanque;
+    public void setStatusBar(PlayerStatusBarView statusBar) {
+        this.stats = statusBar;
     }
     /**
      * detina en el momento que tipo de disparo se esta ejecutando
      * @return int (0) si es disparo normal int(1)si es super disparo
      */
     public int getTypeShoot() {
-        return typeShoot;
+        return missile;
     }
     /**
      * destian el tipo de disparo del tanque
      * @param typeShoot destinado al disparo del tanque
      */
     public void setTypeShoot(int typeShoot) {
-        this.typeShoot = typeShoot;
+        this.missile = typeShoot;
     }
     /**
      * retorna los invasores del objeto
      * @return ControllerGroupOfInvaders( invasores)
      */
     public FleetController getInvasores() {
-        return invasores;
+        return fleet;
     }
     /**
      * destian los invasores del objeto
      * @param invasores (ControllerGroupOfInvaders)
      */
     public void setInvasores(FleetController invasores) {
-        this.invasores = invasores;
+        this.fleet = invasores;
     }
     /**
      * retorna el tanque del objeto
      * @return ControllerTank(tanque)
      */
     public ShipController getTanque() {
-        return tanque;
+        return shipCon;
     }
     /**
      * destian el tanque del objeto
      * @param tanque (ControllerTank)
      */
     public void setTanque(ShipController tanque) {
-        this.tanque = tanque;
+        this.shipCon = tanque;
     }
    
     /**
@@ -325,6 +352,22 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      */
     public void setOperation(int operation) {
         this.operation = operation;
+    }
+    
+    public boolean isWon(){
+        return this.won;
+    }
+    
+    public boolean isLost(){
+        return this.lost;
+    }
+    
+    public void setWon(boolean won){
+        this.won = won;
+    }
+    
+    public void setLost(boolean lost){
+        this.lost = lost;
     }
     
     /**
@@ -343,67 +386,80 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             System.out.println("ActionScreenView class: setVisualElements(index) index is out of bounds. Array size: "+this.visualElements.length);
         }
     }
+    
+    public void fillRenderer(Graphics2D renderer, ArrayList<Rectangle2D> shapes, String where){
+        for(Rectangle2D current : shapes){
+            renderer.fill(current);
+        }
+    }
+    
+    public void renderAliens(Graphics2D aliensRenderer, Graphics2D aliensBulletsRenderer){
+        if (visualElements[0] == true) {
+            aliensRenderer.setColor(this.fleet.getFleetColor());
+            aliensBulletsRenderer.setColor(Color.MAGENTA);
+            for (int i = 0; i < fleet.getAliensListSize(); i++) {
+                if (missile == 1) {
+                    aliensRenderer.setColor(this.fleet.getFleetSecondColor());
+                }
+                
+                fillRenderer(aliensRenderer, fleet.getAlienShapes(i), "aliens");
 
+                if (visualElements[1] == true) {
+                    fillRenderer(aliensBulletsRenderer, fleet.getAlienBulletShape(i), "aliens bullets");
+                }
+            }
+        }
+    }
+    
+    public void renderPlayerShip(Graphics2D playerRenderer){
+        if (visualElements[2] == true) {
+            playerRenderer.setColor(this.shipCon.getShipColor());
+            fillRenderer(playerRenderer, this.shipCon.getPlayerShipShapes(), "Player");
+        }
+    }
+    
+    public void renderPlayerBullets(Graphics2D bulletsRenderer){
+        if (visualElements[3] == true) {
+            bulletsRenderer.setColor(this.shipCon.getShipColor());
+            if (missile == 1) {//si es el super disparo
+                bulletsRenderer.setColor(Color.ORANGE);
+            }
+            fillRenderer(bulletsRenderer, this.shipCon.getBulletShapes(), "player bullets");
+        }
+    }
+    
+    public void textOnScreen(Graphics2D renderer){
+        renderer.setColor(Color.cyan);
+        renderer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        renderer.setFont(new Font("Rockwell",Font.BOLD, 82));
+        String message = "";
+        if(won){
+            message = "YOU WON";
+        } else if (lost){
+            renderer.setColor(Color.RED);
+            message = "YOU LOST";
+        }
+        renderer.drawString(message,90,251); 
+    }
     
 //-------------------Override-----------------------------------------
     
     @Override
-    protected void paintComponent(Graphics img) {
-        super.paintComponent(img);
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        //Won or lost message
+        Graphics2D message = (Graphics2D) g.create();
         
-        //--------------ver naves---------------------------------
+        //Renderers for each group of objects.
+        Graphics2D aliens = (Graphics2D) g.create();
+        Graphics2D aliensBullets = (Graphics2D) g.create();
+        Graphics2D player = (Graphics2D) g.create();
+        Graphics2D playerBullets = (Graphics2D) g.create();
         
-        if (visualElements[0] == true) {
-            Graphics2D aliens = (Graphics2D) img.create();
-            for (int i = 0; i < invasores.getGroupInvader().getInvaders().size(); i++) {
-                for (int j = 0; j < invasores.getGroupInvader().getInvaders().get(i).getShape().size(); j++) {
-                    aliens.setColor(Color.WHITE);
-                    if (typeShoot == 1) {//si es el super disparo
-                        aliens.setColor(Color.RED);
-                    }
-                    
-                    Rectangle2D invasor = invasores.getGroupInvader().getInvaders().get(i).getShape().get(j);
-                    aliens.fill(invasor);
-                }
-                //---------------ver disparos de naves----------------------------------
-                Graphics2D aliensBullets = (Graphics2D) img.create();
-                if (visualElements[1] == true) {
-                    try {//solo si existe disparo
-                        Rectangle2D invasorShoot = invasores.getGroupInvader().getInvaders().get(i).getShoot().getShape().get(0);
-                        aliensBullets.setColor(Color.MAGENTA);
-                        aliensBullets.fill(invasorShoot);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-            aliens.dispose();
-        }
-        
-        Graphics2D player = (Graphics2D) img;
-        float[] color = Color.RGBtoHSB(0,255,7, null);
-        player.setColor(Color.getHSBColor(color[0], color[1], color[2]));
-        
-        //------------------ver tanque---------------------------
-        if (visualElements[2] == true) {
-            for (int i = 0; i < tanque.getTank().getShape().size(); i++) {
-                Rectangle2D tank = tanque.getTank().getShape().get(i);
-                player.fill(tank);
-            }
-        }
-        
-        Graphics2D playerBullets = (Graphics2D) img;
-        //----------------ver disparo del tanque-------------------------------
-        if (visualElements[3] == true) {
-            for (int i = 0; i < tanque.getTank().getShoot().getShape().size(); i++) {
-                Rectangle2D tankShoot = tanque.getTank().getShoot().getShape().get(i);
-                playerBullets.setColor(Color.getHSBColor(color[0], color[1], color[2]));
-                if (typeShoot == 1) {//si es el super disparo
-                    playerBullets.setColor(Color.ORANGE);
-                }
-                playerBullets.fill(tankShoot);
-            }
-
-        }     
+        renderAliens(aliens, aliensBullets);
+        renderPlayerShip(player);
+        renderPlayerBullets(playerBullets);
+        textOnScreen(message);
     }
 
      /**
@@ -417,19 +473,19 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
             switch(this.operation) {
                 case 0:
                     //movimiento de tanque
-                    tanque.moveLeftWithShoot();
+                    shipCon.moveLeftWithShoot();
                     repaint();
                     break;
                 case 1:
                     //movimiento de tanque
-                    tanque.moveRightWithShoot();
+                    shipCon.moveRightWithShoot();
                     repaint();
                     break;
                 case 2:
                     //disparo del tanque
-                    if (typeShoot == 0) {
+                    if (missile == 0) {
                         tankShoot();
-                    }else if (typeShoot == 1) {
+                    }else if (missile == 1) {
                         tankSuperShoot();
                     }
                     break;
@@ -440,7 +496,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
                 case 4:
                     //disparo invasores
                     while (!Thread.interrupted()) {
-                        invaderShoot();
+                        alienShoots();
                     }
                     break;
                 default:

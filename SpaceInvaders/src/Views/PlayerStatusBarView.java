@@ -6,6 +6,8 @@
 package Views;
 
 import Controllers.ShipController;
+import Models.Bullet;
+import Models.Ship;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,14 +23,26 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
     /**
      * Creates new form gameBar
      */
-    private ShipController tanque;
+    private ShipController shipCon;
+    
+    //Status bar objects
+    final int catSeparator = 600;
+    final int xInitPostion = 18;
+    final int yInitPosition = 10;
+    final int itemSpaceSeparator = 20;
+    
+    //Graphical objects
+    ArrayList<Ship> lives;
+    ArrayList<Bullet> missiles;
     
     public PlayerStatusBarView() {
  
     }
-    public PlayerStatusBarView(ShipController tank){
-        tanque = tank;
+    public PlayerStatusBarView(ShipController ship){
         initComponents();
+        this.shipCon = ship;
+        this.lives = new ArrayList<>();
+        this.missiles = new ArrayList<>();
     }
     
     /**
@@ -36,15 +50,66 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
      * @return ControllerTank
      */
     public ShipController getTanque() {
-        return tanque;
+        return shipCon;
     }
     /**
      * destina el tanque que sera usado en el objeto
      * @param tanque a destinar
      */
     public void setTanque(ShipController tanque) {
-       this.tanque = tanque;
+       this.shipCon = tanque;
        repaint();
+    }
+    
+    public void createLiveShapes(){
+        this.lives.clear();
+        int currentX = xInitPostion-8;
+        //System.out.println("lives: "+this.shipCon.getLivesCount());
+        for (int i = 0; i < this.shipCon.getLivesCount(); i++) {//cantidad de vidas en forma de tanque
+            Ship ship = new Ship(currentX, yInitPosition);
+            currentX += itemSpaceSeparator + ship.getShapes().get(0).getWidth();
+            this.lives.add(ship);
+        }
+        //System.out.println("lives list: "+this.lives.size());
+    }
+    
+    public void createMissileShapes(){
+        this.missiles.clear();
+        int currentX = catSeparator+itemSpaceSeparator;
+        for (int i = 0; i < this.shipCon.getMissileCapacity(); i++) {
+            Bullet bullet = new Bullet(currentX, yInitPosition, 8 , 15);
+            bullet.addShape(currentX-7, yInitPosition+16, 20, 3);
+            currentX -= itemSpaceSeparator + bullet.getShapes().get(0).getWidth();
+            this.missiles.add(bullet);
+        }
+    }
+    
+    public void fillRenderer(Graphics2D renderer, ArrayList<Rectangle2D> shapes){
+        for(Rectangle2D current : shapes){
+            renderer.fill(current);
+        }
+    }
+    
+    public void renderPlayerLives(Graphics2D renderer){
+        createLiveShapes();
+        renderer.setColor(this.shipCon.getShipColor());
+        int n = 0;
+        for(Ship current : this.lives){
+            //System.out.println("lives: "+n+" | x: "+current.getX()+", y: "+current.getY());
+            fillRenderer(renderer, current.getShapes());
+            n++;
+        }
+    }
+    
+    public void renderPlayerMissiles(Graphics2D renderer){
+        createMissileShapes();
+        renderer.setColor(Color.ORANGE);
+        int n = 0;
+        for(Bullet current : this.missiles){
+            //System.out.println("missiles: "+n+" | x: "+current.getX()+", y: "+current.getY());
+            fillRenderer(renderer, current.getShapes());
+            n++;
+        }
     }
 
     /**
@@ -69,35 +134,13 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
-    protected void paintComponent(Graphics grphcs) {
-        super.paintComponent(grphcs); //To change body of generated methods, choose Tools | Templates.
-        Graphics2D playerLives = (Graphics2D) grphcs;
-        float[] color = Color.RGBtoHSB(0,255,7, null);
-        playerLives.setColor(Color.getHSBColor(color[0], color[1], color[2]));
-        try {
-            for (int i = 0; i < tanque.getConsumable().getLivesSize(); i++) {
-                ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getlives().get(i).getShape();//formas del tanque
-                for (int j = 0; j <  shapes.size(); j++) {
-                    playerLives.fill(shapes.get(j));
-                }
-            }
-            
-            Graphics2D playerMissiles = (Graphics2D) grphcs;
-            playerMissiles.setColor(Color.ORANGE);
-            
-            for (int i = 0; i < tanque.getConsumable().getSuperShootsSize(); i++) {
-                ArrayList<Rectangle2D> shapes =  tanque.getConsumable().getSuperShoot().get(i).getShape();//formas del tanque
-                for (int j = 0; j <  shapes.size(); j++) {
-                    playerMissiles.fill(shapes.get(j));
-                }
-            }
-        } catch (Exception e) {
-        }
-       
-   
-    
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+        Graphics2D playerLives = (Graphics2D) g;
+        Graphics2D playerMissiles = (Graphics2D) g;
         
-        
+        renderPlayerLives(playerLives);
+        renderPlayerMissiles(playerMissiles);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

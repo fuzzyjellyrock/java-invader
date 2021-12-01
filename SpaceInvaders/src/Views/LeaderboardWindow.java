@@ -88,7 +88,7 @@ public class LeaderboardWindow extends javax.swing.JDialog {
         lblHighScoreTitle.setText("LEADERBOARD");
 
         buttonClose.setBackground(new java.awt.Color(0, 0, 0));
-        buttonClose.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
+        buttonClose.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         buttonClose.setForeground(new java.awt.Color(255, 255, 255));
         buttonClose.setText("CLOSE");
         buttonClose.addActionListener(new java.awt.event.ActionListener() {
@@ -118,7 +118,7 @@ public class LeaderboardWindow extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(lblHighScoreTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addComponent(lblHighScoreTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(scrollPaneLeaderboard, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
