@@ -13,10 +13,12 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Position
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class GraphicsObject {
+public class ObjectShapes {
     private int speed;
     private int x;
     private int y;
+    int width;
+    int height;
     //forma o imagen del objeto
     private ArrayList<Rectangle2D> shapes;
     private Color color;
@@ -31,14 +33,14 @@ public class GraphicsObject {
     /**
      * constructor position null
      */
-    public GraphicsObject() {
+    public ObjectShapes() {
     }
     /**
      * Constructor position con parametros completos
      * @param x ubicacion principal en el eje c de la position
      * @param y ubicacion principal en el eje y de la position
      */
-    public GraphicsObject(int x, int y, int speed) {
+    public ObjectShapes(int x, int y, int speed) {
         this.speed = speed;
         this.x = x;
         this.y = y;
@@ -53,7 +55,7 @@ public class GraphicsObject {
      * @param width anchura de la forma 
      * @param height altura de la forma 
      */
-    public void addShape(int x, int y, int width,int height){ 
+    public void addShape(int x, int y, int width, int height){ 
         Rectangle2D aux = new Rectangle2D.Double(x, y, width, height); 
         shapes.add(aux);
     }
@@ -65,7 +67,7 @@ public class GraphicsObject {
         String aux = "";
         for (int i = 0; i < shapes.size(); i++) {
             aux += "\n     ----------forma N°"+i+"----------"+
-                    "\nVelocidad: "+speed+
+                    //"\nVelocidad: "+speed+
                     "\nx: "+shapes.get(i).getX()+
                     "\ny: "+shapes.get(i).getY()+
                     "\nAncho: "+shapes.get(i).getWidth()+

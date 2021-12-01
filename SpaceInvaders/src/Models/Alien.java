@@ -11,8 +11,10 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Invader
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Alien extends GraphicsObject {
+public abstract class Alien extends ObjectShapes {
 
+    private int alienType;
+    
     private Bullet bullet;
     private int bulletSpeed = 7;
     private int bulletRefreshRate;
@@ -39,6 +41,9 @@ public class Alien extends GraphicsObject {
      */
     public Alien(int x, int y, int width, int height, int speed, long refreshShoot) {
         super(x, y, speed);
+        this.width = width;
+        this.height = height;
+        this.alienType = 0;
 
         //creacion de la bala 
         bullet = new Bullet((int) ((width / 2) + x - 1), y, 3, 5, bulletSpeed, refreshShoot);
@@ -155,6 +160,9 @@ public class Alien extends GraphicsObject {
         }
 
     }
+    
+    public abstract void setSkin();
+    
     /**
      * Forma de eliminar el invasor del juego, eliminado sus formas y dandolo por muerto (dead =true)
      */
@@ -242,6 +250,20 @@ public class Alien extends GraphicsObject {
      */
     public void setBulletRefreshRate(int bulletRefreshRate) {
         this.bulletRefreshRate = bulletRefreshRate;
+    }
+
+    /**
+     * @return the alienType
+     */
+    public int getAlienType() {
+        return alienType;
+    }
+
+    /**
+     * @param alienType the alienType to set
+     */
+    public void setAlienType(int alienType) {
+        this.alienType = alienType;
     }
 
 }

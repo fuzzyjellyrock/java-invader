@@ -12,7 +12,7 @@ import java.awt.geom.Rectangle2D;
  * Bloque con los atributos y métodos de la clase Shoot (Disparo)
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Bullet extends GraphicsObject {
+public class Bullet extends ObjectShapes {
         
     private long refreshRate; 
     

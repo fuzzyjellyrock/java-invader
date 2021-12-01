@@ -36,14 +36,21 @@ public class FleetController {
      * primera nave y todas partiran de hay)
      * @param row filas de invasores que se encontra en el grupo
      * @param column columnas de invasores que se encontra en el grupo
-     * @param speed velocidad del grupo
      * @param refreshRateInvaders fps del grupo
      */
-    public FleetController(int xInicial, int yInicial, int row, int column, int speed, int refreshRateInvaders) {
-        this.fleet = new Fleet(xInicial, yInicial, row, column, speed, refreshRateInvaders);
+    public FleetController(int refreshRateInvaders) {
+        this.fleet = new Fleet(refreshRateInvaders);
     }
     //------------------Methods------------------------------------------  
 
+    public void setRowsAndColumns(int level){
+        this.fleet.setRowsAndColumns(level);
+    }
+    
+    public void addBoss(long refreshRate){
+        this.fleet.addBoss(refreshRate);
+    }
+    
     /**
      * mueve las naves gunto con sus disparos a la izquierda dependiendo su
      * velocidad
@@ -77,8 +84,8 @@ public class FleetController {
  * @param speedBullet velocidad de la bala de los invasores
  * @param refreshBullet tasa de refresco de las balas
  */
-    public void addGroupInvader(int widthInvader,int heightInvader,int spaceBetweenInvaders,int speedBullet,long refreshBullet) {
-        fleet.addGroupInvader(widthInvader, heightInvader, spaceBetweenInvaders, refreshBullet);
+    public void addGroupInvader(int refreshBullet) {
+        fleet.addGroupInvader(refreshBullet);
     }
     
     //--------------------------------------
@@ -151,12 +158,25 @@ public class FleetController {
     }
     /**
      * retorna un invasor dentro de groupOfInvaders dependiendo su index
-     * @param invader idex a buscar
+     * @param alienIndex idex a buscar
      * @return Invader (model/Invader) invasor el cual se busca
      */
-    public Alien getInvader(int invader) {
-        return fleet.getInvaders().get(invader);
+    public Alien getAlien(int alienIndex) {
+        return fleet.getInvaders().get(alienIndex);
     }
+    
+    public int getAlienYCoord(int alienIndex) {
+        return fleet.getInvaders().get(alienIndex).getY();
+    }
+    
+    public int getAlienBulletYCoord(int alienIndex) {
+        return fleet.getInvaders().get(alienIndex).getBullet().getY();
+    }
+    
+    public int getAliensAlive() {
+        return fleet.searchAlive();
+    }
+    
     //-------------------Override-----------------------------------------
 
     @Override

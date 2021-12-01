@@ -30,34 +30,28 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      * Creates new form Game
      */
     
-    //ThreadController
-    
-    private FleetController fleet;//invasores
+    //Controllers
+    private FleetController fleetCon;//invasores
     private ShipController shipCon; //tanque
-    private ShipStatsPanelView stats; //barrera encargada de mostrar los consumibles
-    private GameWindowView viewGame;  //forma de controlar el jframe
-   
-    private int missile=0; //tipo de disparo del tanque
-    private int operation = 0;//Operacion de los hilos
     
-    private int incrementRefreshRate=800;//incremento de velocidad por ronda
+    //Views references
+    private ShipStatsPanelView shipStatsPanel; //barrera encargada de mostrar los consumibles
+    private GameWindowView gameWindow;  //forma de controlar el jframe
+    
+    //Ship initalization.
+    final int xInitShip = 300;
+    final int yInitShip = 485;
+    int missile = 0;
+    
+    private int operation = 0;//Operacion de los hilos
+    private int refreshRate=800;//incremento de velocidad por ronda
     
     //Won or lost screen
     boolean won = false;
     boolean lost = false;
     
-    //Vista del jugador
+    //ActionPanel objects visibility.
     private boolean[] visualElements = new boolean[4];
-    
-    //Ship starting position
-    final int xInitShip = 300;
-    final int yInitShip = 485;
-    
-    //Status bar objects
-    final int catSeparator = 600;
-    final int xInitPostion = 18;
-    final int yInitPosition = 10;
-    final int itemSpaceSeparator = 20;
     
 //____________________________________________________________________
     @SuppressWarnings("unchecked")
@@ -82,23 +76,34 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     public ActionPanelView() {
         initComponents();
         lvl1();
-        visible();
+        setObjectsVisible();
     }
     /**
      * permite hacer visible todo el juego
      */
-    public void visible(){
-                //control de la partes visuales en la interfaz
-        visualElements[0] = true;//mostrar las naves
-        visualElements[1] = true;//mostrar balas de las naves
-        visualElements[2] = true;//mostrar el tanque
-        visualElements[3] = true;//mostrar la balas de tanque
+    public void setObjectsVisible(){
+        visualElements[0] = true;//Show aliens.
+        visualElements[1] = true;//Show aliens's bullets.
+        visualElements[2] = true;//Show ship.
+        visualElements[3] = true;//Show ship's bullets.
     }
     
     public void initializeShip(int level){
         this.shipCon = new ShipController(this.xInitShip, this.yInitShip, 0);
         this.shipCon.createLifes(level);
         this.shipCon.createMissiles(level);
+    }
+    
+    public void initializeFleet(int level){
+        this.fleetCon = new FleetController(this.refreshRate);
+        this.fleetCon.setRowsAndColumns(level);
+        this.fleetCon.addGroupInvader(this.refreshRate/80);
+    }
+    
+    public void initializeBossFleet(int level){
+        this.fleetCon = new FleetController(this.refreshRate-100);
+        this.fleetCon.setRowsAndColumns(level);
+        this.fleetCon.addBoss(refreshRate/80);
     }
     
     //Creación de niveles
@@ -108,10 +113,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     public void lvl1(){
         this.won = false;
         this.lost = false;
-        //invasores
-        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 8, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
-        fleet.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
-        //tanque
+        initializeFleet(1);
         initializeShip(1);
     }
     /**
@@ -121,10 +123,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
               //Creacion de personajes
         this.won = false;
         this.lost = false;
-        //invasores
-        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 9, /*columnas:*/ 9, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate);
-        fleet.addGroupInvader(/*ancho de invasor:*/15,/*alto de invasor*/ 8, /*espacio entre cada invasor*/22,/*velocidad de bala de invasores*/ 5, /*fps de bala de invasores*/(incrementRefreshRate/80));
-        //tanque
+        initializeFleet(2);
         initializeShip(2);
     }
     /**
@@ -134,10 +133,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
               //Creacion de personajes
         this.won = false;
         this.lost = false;
-        //invasores
-        fleet = new FleetController(/*x:*/70, /*y:*/ 30, /*filas:*/ 10, /*columnas:*/ 10, /*y:velocidad de grupo:*/ 10,/*fps de grupo:*/ incrementRefreshRate-100);
-        fleet.getFleet().addBoss(15, 12, 5, incrementRefreshRate/80);
-        //tanque
+        initializeBossFleet(3);
         initializeShip(3);
     }
 
@@ -149,7 +145,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         int shot = -1;
         while (shot == -1) {//mientras el disparo pueda seguir sin problemas
             
-            shot = shipCon.shoot(fleet.getFleet());
+            shot = shipCon.shoot(fleetCon.getFleet());
            
              if (shot == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
                  visualElements[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
@@ -158,12 +154,12 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
                 shipCon.getShip().returnShoot();//retorna la bala    
             }
                   if (shot == 0) {
-                viewGame.getPlayer().addPoints(10);
-                viewGame.showCurrentScore();
+                gameWindow.getPlayer().addPoints(10);
+                gameWindow.showCurrentScore();
                 
             }
                    if (shot == -2) {
-                viewGame.callLvl();
+                gameWindow.callLvl();
                 break;
             }
         repaint();
@@ -178,18 +174,18 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     public void tankSuperShoot() {
         int disparo = -1;
          if (shipCon.removeMissile()) {//solo si tiene disparos de sobra
-                stats.repaint();//eliminalo del la barra de consumibles
+                shipStatsPanel.repaint();//eliminalo del la barra de consumibles
             shipCon.createDestroyMissile(1);//genera la forma de la bala
              while (disparo != 2) {//mientras el disparo pueda seguir sin problemas
-                 disparo = shipCon.launchMissile(fleet.getFleet());//mueve el disparo
+                 disparo = shipCon.launchMissile(fleetCon.getFleet());//mueve el disparo
                 
                      if (disparo == 0) {
-                viewGame.getPlayer().addPoints(10);
-                viewGame.showCurrentScore();
+                gameWindow.getPlayer().addPoints(10);
+                gameWindow.showCurrentScore();
                 
                  }
                 if (disparo == -2) {
-                viewGame.callLvl();   
+                gameWindow.callLvl();   
                 break;
             }
                  repaint();
@@ -206,17 +202,17 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      * Mueve los invasores de abajo, izquierda y derecha y por movimiento
      */
     public void moveInvaders() {
-        while (fleet.moveGroupDown()) {
+        while (fleetCon.moveGroupDown()) {
             repaint();
 //--------------------------------------------------------
-            while (fleet.moveGroupRight()) {
+            while (fleetCon.moveGroupRight()) {
                 repaint();    
             }
 //--------------------------------------------------------            
-            fleet.moveGroupDown();
+            fleetCon.moveGroupDown();
             repaint();
 //--------------------------------------------------------
-            while (fleet.moveGroupLeft()) {
+            while (fleetCon.moveGroupLeft()) {
                 repaint();
             }
         }
@@ -227,22 +223,22 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      */
     public void alienShoots() {
         //Posibilidad de disparo
-        int possibility = fleet.randomShoot();
+        int possibility = fleetCon.randomShoot();
         //velocidad de disparo por segundo
         try {Thread.sleep(100); } catch (Exception e) {}
-        if (possibility > -1 && (fleet.getInvader(possibility).getY()==fleet.getInvader(possibility).getBullet().getY())) {//si si existe la posibilidad y la bala se encuentra en el invasor
+        if (possibility > -1 && (fleetCon.getAlienYCoord(possibility) == fleetCon.getAlienBulletYCoord(possibility))) {//si si existe la posibilidad y la bala se encuentra en el invasor
             int aux = 0;//determina el camino del disparo
-            int auxLvl=viewGame.getIncrementLvl();//determina si el tanque si ya paso de nivel, si es asi detiene la bala del invasor
+            int auxLvl=gameWindow.getIncrementLvl();//determina si el tanque si ya paso de nivel, si es asi detiene la bala del invasor
             while (aux == 0) {//mientras el disparo no colisione
-                aux = fleet.shootInvader(possibility, shipCon.getShip());//mueve la bala
+                aux = fleetCon.shootInvader(possibility, shipCon.getShip());//mueve la bala
                 repaint(); 
-                if (auxLvl!=viewGame.getIncrementLvl() && fleet.getFleet().searchAlive()==0) {//para la bala de el invasor al terminar el nivel
+                if (auxLvl!=gameWindow.getIncrementLvl() && fleetCon.getAliensAlive() == 0) {//para la bala de el invasor al terminar el nivel
                     break;
                 }
             }
           
             if (aux == 1) {
-                stats.repaint();
+                shipStatsPanel.repaint();
                 if (shipCon.getLivesListSize()==0 && !lost) {//game over(si le da al tanque y no tiene vidas)
                    dead();
                 }
@@ -253,7 +249,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      * destina el game over de la partida usando el metodo / viewGame.stop()/dentro de ViewGame
      */
     public void dead(){
-        viewGame.endCurrentGame();
+        gameWindow.endCurrentGame();
     }
 //------------------GetSetters----------------------------------------
     
@@ -282,28 +278,28 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      * @param incrementRefreshRate puntos a restar
      */
     public void setRestarRefreshRate(int incrementRefreshRate) {
-        this.incrementRefreshRate -= incrementRefreshRate;
+        this.refreshRate -= incrementRefreshRate;
     }
     /**
      * destina la tasa de refresco en el objeto
      * @param incrementRefreshRate a destinar
      */
     public void setRefreshRate(int incrementRefreshRate) {
-        this.incrementRefreshRate = incrementRefreshRate;
+        this.refreshRate = incrementRefreshRate;
     }
     /**
      * detina el jFrame de el objeto
      * @param viewGame a destinar
      */
     public void setViewGame(GameWindowView viewGame) {
-        this.viewGame = viewGame;
+        this.gameWindow = viewGame;
     }
     /**
      * destina los consumibles del tanque
      * @param statusBar consumibles del tanque
      */
     public void setStatusBar(ShipStatsPanelView statusBar) {
-        this.stats = statusBar;
+        this.shipStatsPanel = statusBar;
     }
     /**
      * detina en el momento que tipo de disparo se esta ejecutando
@@ -324,14 +320,14 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
      * @return ControllerGroupOfInvaders( invasores)
      */
     public FleetController getInvasores() {
-        return fleet;
+        return fleetCon;
     }
     /**
      * destian los invasores del objeto
      * @param invasores (ControllerGroupOfInvaders)
      */
     public void setInvasores(FleetController invasores) {
-        this.fleet = invasores;
+        this.fleetCon = invasores;
     }
     /**
      * retorna el tanque del objeto
@@ -397,17 +393,17 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     
     public void renderAliens(Graphics2D aliensRenderer, Graphics2D aliensBulletsRenderer){
         if (visualElements[0] == true) {
-            aliensRenderer.setColor(this.fleet.getFleetColor());
+            aliensRenderer.setColor(this.fleetCon.getFleetColor());
             aliensBulletsRenderer.setColor(Color.MAGENTA);
-            for (int i = 0; i < fleet.getAliensListSize(); i++) {
+            for (int i = 0; i < fleetCon.getAliensListSize(); i++) {
                 if (missile == 1) {
-                    aliensRenderer.setColor(this.fleet.getFleetSecondColor());
+                    aliensRenderer.setColor(this.fleetCon.getFleetSecondColor());
                 }
                 
-                fillRenderer(aliensRenderer, fleet.getAlienShapes(i), "aliens");
+                fillRenderer(aliensRenderer, fleetCon.getAlienShapes(i), "aliens");
 
                 if (visualElements[1] == true) {
-                    fillRenderer(aliensBulletsRenderer, fleet.getAlienBulletShape(i), "aliens bullets");
+                    fillRenderer(aliensBulletsRenderer, fleetCon.getAlienBulletShape(i), "aliens bullets");
                 }
             }
         }
@@ -437,12 +433,12 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         String message = "";
         if(won){
             message = "YOU WON";
-            Thread.sleep(3000);
         } else if (lost){
             renderer.setColor(Color.RED);
             message = "YOU LOST";
         }
         renderer.drawString(message,90,251); 
+        Thread.sleep(3000);
     }
     
 //-------------------Override-----------------------------------------

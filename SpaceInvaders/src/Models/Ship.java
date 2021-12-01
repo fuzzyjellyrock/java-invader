@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Bloque con los atributos y métodos de la clase Tanque
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class Ship extends GraphicsObject{
+public class Ship extends ObjectShapes{
     
     final int speed = 15;
     

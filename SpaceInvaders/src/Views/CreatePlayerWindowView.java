@@ -6,7 +6,6 @@ package Views;
 
 import Controllers.PlayerController;
 import java.awt.Color;
-import javax.swing.JOptionPane;
 
 /**
  *
