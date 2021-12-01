@@ -12,13 +12,13 @@ import javax.swing.JOptionPane;
  *
  * @author fuzzyrock
  */
-public class CreatePlayer extends javax.swing.JDialog {
+public class CreatePlayerWindowView extends javax.swing.JDialog {
 
     /**
      * Creates new form LeaderboardWindow
      */
-    WindowView window;
-    public CreatePlayer(java.awt.Frame parent, boolean modal, WindowView w, String prevName) {
+    GameWindowView window;
+    public CreatePlayerWindowView(java.awt.Frame parent, boolean modal, GameWindowView w, String prevName) {
         super(parent, modal);
         initComponents();
         

@@ -15,14 +15,14 @@ import java.util.ArrayList;
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class WindowView extends javax.swing.JFrame {
+public class GameWindowView extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        game = new Views.ActionScreenView();
-        gameStatusBar = new Views.PlayerStatusBarView(game.getTanque());
+        game = new Views.ActionPanelView();
+        gameStatusBar = new Views.ShipStatsPanelView(game.getTanque());
         lblShields = new javax.swing.JLabel();
         lblMissiles = new javax.swing.JLabel();
         buttonNewGame = new javax.swing.JButton();
@@ -261,7 +261,7 @@ public class WindowView extends javax.swing.JFrame {
     private int round = 0;
     private int currentLevel = 0;
 
-    public WindowView() {
+    public GameWindowView() {
         initComponents();
         
         //Set JFrame properties.
@@ -379,7 +379,7 @@ public class WindowView extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonNewGameActionPerformed
 
     private void buttonShowLeaderboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonShowLeaderboardActionPerformed
-        LeaderboardWindow lb = new LeaderboardWindow(this, true, this.lbCon);
+        LeaderboardWindowView lb = new LeaderboardWindowView(this, true, this.lbCon);
         lb.setVisible(true);
         buttonNewGame.setFocusable(false);
         buttonCreatePlayer.setFocusable(false);
@@ -395,7 +395,7 @@ public class WindowView extends javax.swing.JFrame {
                 name = playerCon.getPlayerName();
             }
             setPlayerCon(new PlayerController());
-            CreatePlayer w = new CreatePlayer(this, true, this, name);
+            CreatePlayerWindowView w = new CreatePlayerWindowView(this, true, this, name);
             w.setVisible(true);
             this.buttonNewGame.setVisible(true);
         }
@@ -609,14 +609,18 @@ public class WindowView extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameWindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameWindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameWindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GameWindowView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -625,7 +629,7 @@ public class WindowView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new WindowView().setVisible(true);
+                new GameWindowView().setVisible(true);
             }
         });
     }
@@ -634,8 +638,8 @@ public class WindowView extends javax.swing.JFrame {
     private javax.swing.JButton buttonCreatePlayer;
     private javax.swing.JButton buttonNewGame;
     private javax.swing.JButton buttonShowLeaderboard;
-    private Views.ActionScreenView game;
-    private Views.PlayerStatusBarView gameStatusBar;
+    private Views.ActionPanelView game;
+    private Views.ShipStatsPanelView gameStatusBar;
     private javax.swing.JLabel lblCurrentLevel;
     private javax.swing.JLabel lblCurrentLevelTitle;
     private javax.swing.JLabel lblCurrentScore;

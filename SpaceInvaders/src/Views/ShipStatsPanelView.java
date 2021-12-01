@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class PlayerStatusBarView extends javax.swing.JPanel {
+public class ShipStatsPanelView extends javax.swing.JPanel {
 
     /**
      * Creates new form gameBar
@@ -35,10 +35,10 @@ public class PlayerStatusBarView extends javax.swing.JPanel {
     ArrayList<Ship> lives;
     ArrayList<Bullet> missiles;
     
-    public PlayerStatusBarView() {
+    public ShipStatsPanelView() {
  
     }
-    public PlayerStatusBarView(ShipController ship){
+    public ShipStatsPanelView(ShipController ship){
         initComponents();
         this.shipCon = ship;
         this.lives = new ArrayList<>();

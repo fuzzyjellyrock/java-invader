@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
  * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
  */
-public class ActionScreenView extends javax.swing.JPanel implements Runnable {
+public class ActionPanelView extends javax.swing.JPanel implements Runnable {
 
     /**
      * Creates new form Game
@@ -32,8 +32,8 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     
     private FleetController fleet;//invasores
     private ShipController shipCon; //tanque
-    private PlayerStatusBarView stats; //barrera encargada de mostrar los consumibles
-    private WindowView viewGame;  //forma de controlar el jframe
+    private ShipStatsPanelView stats; //barrera encargada de mostrar los consumibles
+    private GameWindowView viewGame;  //forma de controlar el jframe
    
     private int missile=0; //tipo de disparo del tanque
     private int operation = 0;//Operacion de los hilos
@@ -77,7 +77,7 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
     /**
      * constructor de personajes y la parte visual
      */
-    public ActionScreenView() {
+    public ActionPanelView() {
         initComponents();
         lvl1();
         visible();
@@ -293,14 +293,14 @@ public class ActionScreenView extends javax.swing.JPanel implements Runnable {
      * detina el jFrame de el objeto
      * @param viewGame a destinar
      */
-    public void setViewGame(WindowView viewGame) {
+    public void setViewGame(GameWindowView viewGame) {
         this.viewGame = viewGame;
     }
     /**
      * destina los consumibles del tanque
      * @param statusBar consumibles del tanque
      */
-    public void setStatusBar(PlayerStatusBarView statusBar) {
+    public void setStatusBar(ShipStatsPanelView statusBar) {
         this.stats = statusBar;
     }
     /**

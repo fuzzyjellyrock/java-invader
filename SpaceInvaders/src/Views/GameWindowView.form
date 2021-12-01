@@ -79,7 +79,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="Views.ActionScreenView" name="game">
+    <Container class="Views.ActionPanelView" name="game">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -102,7 +102,7 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Container class="Views.PlayerStatusBarView" name="gameStatusBar">
+    <Container class="Views.ShipStatsPanelView" name="gameStatusBar">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -116,7 +116,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Views.PlayerStatusBarView(game.getTanque());"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Views.ShipStatsPanelView(game.getTanque());"/>
       </AuxValues>
 
       <Layout>

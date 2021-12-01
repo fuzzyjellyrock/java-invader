@@ -12,13 +12,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author fuzzyrock
  */
-public class LeaderboardWindow extends javax.swing.JDialog {
+public class LeaderboardWindowView extends javax.swing.JDialog {
 
     /**
      * Creates new form LeaderboardWindow
      */
     LeaderboardController lbCon;
-    public LeaderboardWindow(java.awt.Frame parent, boolean modal, LeaderboardController lbCon) {
+    public LeaderboardWindowView(java.awt.Frame parent, boolean modal, LeaderboardController lbCon) {
         super(parent, modal);
         initComponents();
         
