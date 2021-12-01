@@ -88,8 +88,12 @@ public class Fleet {
         int emptySpace = spaceBetweenInvaders;//espacio entre las naves
         for (int f = 0; f < row; f++) {//filas de la naves
             for (int c = 0; c < column; c++) {//columnas de las naves
-                addInvader(inicioX, inicioY, width, height, groupSpeed,refreshBullet);
-                inicioX += width + emptySpace;  //sumar espacio entre ellos - punto de inicio - y anchura de las naves 
+                if(f%2==0){
+                    addInvader(inicioX, inicioY, width, height, groupSpeed,refreshBullet, 1);
+                }else if(f%2!=0){
+                    addInvader(inicioX, inicioY, width, height, groupSpeed,refreshBullet, 2);
+                }
+                inicioX += width + emptySpace;  //sumar espacio entre ellos - punto de inicio - y anchura de las naves
             }
             inicioX = xInicial;//reinicia el x para la siguiente ilera de invasores
             inicioY += height + emptySpace;// aumente el y
@@ -108,7 +112,7 @@ public class Fleet {
         int inicioY = yInicial;//el inicio donde estaran todas las naves y donde seran colocadas en el eje y
         //primera capa
         for (int f = 0; f < 20; f++) {
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet, 1);
              inicioX += widthInvader;
         }
        inicioX = xInicial;
@@ -122,14 +126,14 @@ public class Fleet {
                  inicioX -= widthInvader;
                 inicioY+=heightInvader;
             }
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet,1);
              inicioX += widthInvader;
         }
         inicioX = xInicial;
          inicioY+= heightInvader;
        //segunda y tercera capa
         for (int f = 0; f < 14; f++) {
-             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet);
+             addInvader(inicioX, inicioY, widthInvader, heightInvader, groupSpeed,refreshBullet,1);
              inicioX += widthInvader;
                if (f==4) {
                 inicioX += 3*widthInvader;
@@ -142,8 +146,8 @@ public class Fleet {
         addShapeInvaders(-5, heightInvader, 20, 8);
         inicioY += heightInvader;
         inicioX = ((inicioX/2)-30)+xInicial;
-        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet);
-        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet);
+        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet,1);
+        addInvader(inicioX, inicioY, widthInvader+10, heightInvader+10, groupSpeed,refreshBullet,1);
 
     }
     /**
@@ -173,14 +177,21 @@ public class Fleet {
      * @param width anchura del invasor
      * @param height altura del invasor
      */
-    public void addInvader(int x, int y, int width, int height, int speed, long refreshShoot) {
+    public void addInvader(int x, int y, int width, int height, int speed, long refreshShoot, int type) {
         //creacion del invader junto con la bala y su velocidad
         Alien aux = new Alien(x, y, width, height, speed, refreshShoot);
         //creacion de formas de los enemigos
-        aux.addShape(x, y, width, height); //forma primario del rectangulo
-        aux.addShape(x-((width/4)+1), y+(height), (width/4)+1, 7);
-        aux.addShape(x+(width/2)-((width/8)), y+(height), (width/4)+1 , 7);
-        aux.addShape(x+width, y+(height), (width/4)+1, 7);
+        if (type == 1){
+            aux.addShape(x, y, width, height); //forma primario del rectangulo
+            aux.addShape(x-((width/4)+1), y+(height), (width/4)+1, 7);
+            aux.addShape(x+(width/2)-((width/8)), y+(height), (width/4)+1 , 7);
+            aux.addShape(x+width, y+(height), (width/4)+1, 7);
+        }else if (type == 2){
+            aux.addShape(x, y, width, height/2); //forma primario del rectangulo
+            aux.addShape(x-((width/4)+1), y, (width/4)+1, 14);
+            aux.addShape(x+(width/2)-((width/8)), y+(height), (width/4)+1 , 7);
+            aux.addShape(x+width, y, (width/4)+1, 14);
+        }
         invaders.add(aux);
     }
     /**

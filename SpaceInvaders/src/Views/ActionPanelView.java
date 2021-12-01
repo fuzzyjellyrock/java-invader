@@ -17,6 +17,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
@@ -241,7 +243,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
           
             if (aux == 1) {
                 stats.repaint();
-                if (shipCon.getLivesListSize()==0) {//game over(si le da al tanque y no tiene vidas)
+                if (shipCon.getLivesListSize()==0 && !lost) {//game over(si le da al tanque y no tiene vidas)
                    dead();
                 }
             }
@@ -412,7 +414,7 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     }
     
     public void renderPlayerShip(Graphics2D playerRenderer){
-        if (visualElements[2] == true) {
+        if (visualElements[2] == true && !lost) {
             playerRenderer.setColor(this.shipCon.getShipColor());
             fillRenderer(playerRenderer, this.shipCon.getPlayerShipShapes(), "Player");
         }
@@ -428,13 +430,14 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
     
-    public void textOnScreen(Graphics2D renderer){
+    public void textOnScreen(Graphics2D renderer) throws InterruptedException{
         renderer.setColor(Color.cyan);
         renderer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         renderer.setFont(new Font("Rockwell",Font.BOLD, 82));
         String message = "";
         if(won){
             message = "YOU WON";
+            Thread.sleep(3000);
         } else if (lost){
             renderer.setColor(Color.RED);
             message = "YOU LOST";
@@ -459,7 +462,11 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         renderAliens(aliens, aliensBullets);
         renderPlayerShip(player);
         renderPlayerBullets(playerBullets);
-        textOnScreen(message);
+        try {
+            textOnScreen(message);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ActionPanelView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
      /**
