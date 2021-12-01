@@ -85,7 +85,7 @@ public class FleetController {
  * @param refreshBullet tasa de refresco de las balas
  */
     public void addGroupInvader(int refreshBullet) {
-        fleet.addGroupInvader(refreshBullet);
+        fleet.createAliens(refreshBullet);
     }
     
     //--------------------------------------
@@ -94,7 +94,7 @@ public class FleetController {
      * determina cuando quedan menos invasore que velocidad tendran los invasores, solo se activa si el tanque le dio a un invasor
      */
     public void controlOfRefreshRate(){
-        fleet.controlOfRefreshRate();
+        fleet.refreshRateControl();
     }
     /**
      * dispara aleatoriamente una bala de los invasores
@@ -102,7 +102,7 @@ public class FleetController {
      * @param enemy tanque enemigo al cual le puede afectar
      */
     public int randomShoot() {
-        return fleet.randomShoot();
+        return fleet.randomShots();
     }
     /**
      * a partir de un index(invader) determina que invasor disparara
@@ -174,7 +174,7 @@ public class FleetController {
     }
     
     public int getAliensAlive() {
-        return fleet.searchAlive();
+        return fleet.getAliensAlive();
     }
     
     //-------------------Override-----------------------------------------

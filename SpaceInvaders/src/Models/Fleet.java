@@ -52,13 +52,8 @@ public class Fleet {
     }
 
    /**
-    * Constructor completo de groupOfInvaders
-    * @param xInicial posicion inicial x del grupo (Donde se pondra la primera nave y todas partiran de hay)
-    * @param yInicial posicion inicial y del grupo (Donde se pondra la primera nave y todas partiran de hay)
-    * @param rows filas de los invasores 
-    * @param columns columnas de los invasores 
-    * @param speed velocidad del grupo de invasores
-    * @param refreshRate fps del grupo
+    * 
+    * @param refreshRate 
     */
     public Fleet(int refreshRate) {
         this.refreshRate = refreshRate;
@@ -91,23 +86,17 @@ public class Fleet {
     }
     
     /**
-   * Crea el grupo de invasores dado un tamaño parecido a una matriz, es decir
-     * si se ingresa una fila y columna (ejem: 2*2 ) se crearan 4 invasores.
-     * Otro ejemplo seria una fila y columna (ejem: 3*3) genera 9 invasores
- * @param widthInvader ancho de los invasores
- * @param heightInvader alto de los invasores
- * @param spaceBetweenInvaders espacio entre los invasores
- * @param speedBullet velocidad de la bala de los invasores
- * @param refreshBullet tasa de refresco de las balas
- */
-    public void addGroupInvader(long refreshBullet) {
+     * 
+     * @param bulletsRefreshRate 
+     */
+    public void createAliens(long bulletsRefreshRate) {
         invaders = new ArrayList<>();
         int xTemp = initialX;//el inicio donde estaran todas las naves y donde seran colocadas en el eje x
         int yTemp = initialY;//el inicio donde estaran todas las naves y donde seran colocadas en el eje y
         for (int f = 0; f < rows; f++) {//filas de la naves
             int mod = f%4;
             for (int c = 0; c < columns; c++) {//columnas de las naves
-                addInvader(xTemp, yTemp, refreshBullet, mod+1);
+                addInvader(xTemp, yTemp, bulletsRefreshRate, mod+1);
                 xTemp += width + socialDistancing;  //sumar espacio entre ellos - punto de inicio - y anchura de las naves
             }
             xTemp = initialX;//reinicia el x para la siguiente ilera de invasores
@@ -116,20 +105,17 @@ public class Fleet {
     }
     
     /**
-     * crea a partir de invasores un modelo de gefe dado un tamaño(su forma siempre sera igual)
-     * @param width ancho de los invasores
-     * @param height alto de los invasores
-     * @param speedBullet valocidad de las balas 
-     * @param refreshBullet tasa de refresco de las balas
+     * 
+     * @param bulletsRefreshRate 
      */
-    public void addBoss(long refreshBullet){
+    public void addBoss(long bulletsRefreshRate){
         this.invaders.clear();
         int inicioX = initialX;//el inicio donde estaran todas las naves y donde seran colocadas en el eje x
         int inicioY = initialY;//el inicio donde estaran todas las naves y donde seran colocadas en el eje y
         //primera capa
         for (int f = 0; f < 20; f++) {
             int modulo = f%4;
-            addInvader(inicioX, inicioY,refreshBullet, modulo);
+            addInvader(inicioX, inicioY,bulletsRefreshRate, modulo);
             inicioX += width;
         }
        inicioX = initialX;
@@ -144,7 +130,7 @@ public class Fleet {
                  inicioX -= width;
                 inicioY+=height;
             }
-             addInvader(inicioX, inicioY, refreshBullet, modulo);
+             addInvader(inicioX, inicioY, bulletsRefreshRate, modulo);
              inicioX += width;
         }
         inicioX = initialX;
@@ -152,7 +138,7 @@ public class Fleet {
        //segunda y tercera capa
         for (int f = 0; f < 14; f++) {
             int modulo = f%4;
-             addInvader(inicioX, inicioY, refreshBullet, modulo);
+             addInvader(inicioX, inicioY, bulletsRefreshRate, modulo);
              inicioX += width;
                if (f==4) {
                 inicioX += 3*width;
@@ -165,8 +151,8 @@ public class Fleet {
         addShapeInvaders(-5, height, 20, 8);
         inicioY += height;
         inicioX = ((inicioX/2)-30)+initialX;
-        addInvader(inicioX, inicioY, refreshBullet, 0);
-        addInvader(inicioX, inicioY, refreshBullet, 0);
+        addInvader(inicioX, inicioY, bulletsRefreshRate, 0);
+        addInvader(inicioX, inicioY, bulletsRefreshRate, 0);
 
     }
     /**
@@ -185,12 +171,27 @@ public class Fleet {
         }
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param refreshShoot
+     * @param type 
+     */
     public void addInvader(int x, int y, long refreshShoot, int type) {
         //creacion del invader junto con la bala y su velocidad
         Alien alien = createAlienType(x, y, refreshShoot,type);
         invaders.add(alien);
     }
     
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param refreshShoot
+     * @param type
+     * @return 
+     */
     public Alien createAlienType(int x, int y, long refreshShoot, int type){
         Alien alien;
         switch (type) {
@@ -240,9 +241,9 @@ public class Fleet {
       *     <br></b>false</b> si el movimiento pasa los limites, o si el ya no hay mas invaders a que mover
      */
     public boolean moveGroupLeft() {
-        if (invaders.size() >= 0  && searchAlive()!=0) {//solo se mueven si existe invasores
+        if (invaders.size() >= 0  && getAliensAlive()!=0) {//solo se mueven si existe invasores
             
-            try {Thread.sleep(getRefreshRate());} catch (Exception e) {}//---------fps 
+            try {Thread.sleep(this.refreshRate);} catch (Exception e) {}//---------fps 
             ////busca si es posible mover el grupo, verificando si alguna choca o no con el lado derecho (limitLeft)
             for (Alien invader : invaders) {
                 if (invader.verifyLimitLeft() == true) {
@@ -266,8 +267,8 @@ public class Fleet {
      */
     public boolean moveGroupRight() {
         
-        if (invaders.size() >= 0 && searchAlive()!=0) {//solo se mueven si existe invasores
-             try {Thread.sleep(getRefreshRate());} catch (Exception e) {System.out.println("error");}//---------fps
+        if (invaders.size() >= 0 && getAliensAlive()!=0) {//solo se mueven si existe invasores
+             try {Thread.sleep(this.refreshRate);} catch (Exception e) {System.out.println("error");}//---------fps
             //busca si es posible mover el grupo, verificando si alguna choca o no con el lado derecho(limitRight)
              for (Alien invader : invaders) {
                 if (invader.verifyLimitRight() == true) {
@@ -289,7 +290,7 @@ public class Fleet {
       *     <br></b>false</b> si el movimiento pasa los limites, o si el ya no hay mas invaders a que mover
      */
     public boolean moveGroupDown() {
-         if (invaders.size() >= 0 && searchAlive()!=0) {//solo se mueven si existe invasores
+         if (invaders.size() >= 0 && getAliensAlive()!=0) {//solo se mueven si existe invasores
             //ya que al bajar la nave el movimiento siepre sera uniforme hay que modificar la velocidad a una bajada de 10 cuadros ya que queremos que siempre al bajar sea un velocidad de 10
                for (Alien invader : invaders) {
                 if (invader.verifyLimitDown() == true) {
@@ -310,8 +311,8 @@ public class Fleet {
     /**
      * determina cuando quedan menos invasore que velocidad tendran los invasores, solo se activa si el tanque le dio a un invasor
      */
-    public void controlOfRefreshRate(){
-       int size =searchAlive();
+    public void refreshRateControl(){
+       int size =getAliensAlive();
         if (size==50) {
             refreshRate=refreshRate-(refreshRate/4);
         }else if(20>size && 10<size){
@@ -329,7 +330,7 @@ public class Fleet {
      * busca que invasores estan vivos
      * @return int con la cantidad de invasores vivos
      */
-    public int searchAlive(){
+    public int getAliensAlive(){
         int size=0;
         for (Alien invader : invaders) {//busca quien esta vivo
              if (invader.isDead()==false) {
@@ -343,7 +344,7 @@ public class Fleet {
      * En cambio si la bala se encunetra en el mismo invasor y elimina todo y lo da por muerto
      * @param i invader al cual se quiere eliminar
      */
-    public void removeInvasorShape(int i){
+    public void removeAlienShapes(int i){
         if ( invaders.get(i).getY()==invaders.get(i).getBullet().getY()) {
             invaders.get(i).removeAllShape();
         }else{
@@ -371,10 +372,10 @@ public class Fleet {
             if (invaders.get(i).collision(enemyShoot) == true) {//si hay colision
                 //si le dio a la nave destruyela ( dead =trure)
                  
-                removeInvasorShape(i);
-                controlOfRefreshRate();//revisa la cantidad de invaders y acomoda el refreshRate
+                removeAlienShapes(i);
+                refreshRateControl();//revisa la cantidad de invaders y acomoda el refreshRate
                 //retorna el invasor con colision
-                if(searchAlive()==0){//busca si el invasor dado fue el ultimos
+                if(getAliensAlive()==0){//busca si el invasor dado fue el ultimos
                     return -2;
                 }
                 return i;
@@ -388,7 +389,7 @@ public class Fleet {
      * @return <b>(int > 0) </b>el cual de la posicion de el invasor aleatorio <br> 
      *          <b>(int -1) </b> si no encuentra un invasor aleatorio
      */
-    public int randomShoot(){
+    public int randomShots(){
         //busca si por turno dispara
         int shotPossibility = (int) (Math.random() * 3 + 0);
         if (shotPossibility == 1) {//si se acepta el disparo escoje una nave aleatoria y lo pone a disparar 
