@@ -8,8 +8,8 @@ package Models;
 import java.util.ArrayList;
 
 /**
- * Bloque con los atributos y métodos de la clase Invader
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * 
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public abstract class Alien extends ObjectShapes {
 
@@ -19,25 +19,19 @@ public abstract class Alien extends ObjectShapes {
     private int bulletSpeed = 7;
     private int bulletRefreshRate;
     
-    private boolean dead  = false;
+    private boolean dead = false;
 
-//-----------------Constructor-----------------------------------------
-    /**
-     * constructor null de invasor
-     */
     public Alien() {
     }
 
     /**
-     * Crea el invasor con su posicion inicial, su forma inicial, su disparo con
-     * la tasa de movimiento
-     * @param x posicion en x del invader
-     * @param y posicion en y del invader
-     * @param width anchura del rectangulo conformado por el invader
-     * @param height anchura del rectangulo conformado por el invader
-     * @param speed velocidad del invader
-     * @param speedBullet velocidad de la bala del invader
-     * @param refreshShoot fps de el invasor
+     * 
+     * @param x initial x position
+     * @param y initial y position
+     * @param width alien width
+     * @param height alien height
+     * @param speed alien speed
+     * @param refreshShoot alien shooting rate
      */
     public Alien(int x, int y, int width, int height, int speed, long refreshShoot) {
         super(x, y, speed);
@@ -45,60 +39,54 @@ public abstract class Alien extends ObjectShapes {
         this.height = height;
         this.alienType = 0;
 
-        //creacion de la bala 
         bullet = new Bullet((int) ((width / 2) + x - 1), y, 3, 5, bulletSpeed, refreshShoot);
     }
-    //------------------Methods-------------------------------------------
-    //movimiento de el invasor
+    
     /**
-     * Mueve la nave junto con la bala la izquierda. La bala solo se mueve con la nave, si la bala se encuentra dentro de la nave(nave.y == shoot.y)
-      * @return <b>True</b> si el movimiento fue exitoso ( no importa si no se movio la bala)
-      *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que speed es menor igual que 0
+     * Moves alien while shooting to the right.
+     * @return True if the bullet was able to be moved according to speed and barriers limits.
      */
-    public boolean moveLeftWithShoot() {
+    public boolean moveToTheLeftShooting() {
         if (moveLeft()) {
             if (getY() == bullet.getY()) {
-                bullet.moveLeftWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala    
+                bullet.moveToTheLeft(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala    
             }
             return true;
         } else {
             return false;
         }
     }
+    
     /**
-     * Mueve la nave junto con la bala a la derecha. La bala solo se mueve con la nave, si la bala se encuentra dentro de la nave(nave.y == shoot.y)
-      * @return <b>True</b> si el movimiento fue exitoso ( no importa si no se movio la bala)
-      *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que speed es menor igual que 0
+     * Moves alien while shooting to the left.
+     * @return True if the bullet was able to be moved according to speed and barriers limits.
      */
-    public boolean moveRightWithShoot() {
+    public boolean moveToTheRightShooting() {
         if (moveRight()) {
             if (getY() == bullet.getY()) {
-                bullet.moveRightWithSpeed(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala
+                bullet.moveToTheRight(getSpeed());//mueve el disparo del tanque sin modificar la velocidad real de la bala
             }
             return true;
         } else {
             return false;
         }
     }    
+    
     /**
-     * Mueve la nave junto con la bala para abajo. La bala solo se mueve con la nave, si la bala se encuentra dentro de la nave(nave.y == shoot.y)
-     * NOTA:si la bala se mueve con la nave hay que modificar la velcidad de la bala para abajo, ya que le velocidad de la bala para abajo es rapida
-     * @return <b>True</b> si el movimiento fue exitoso ( no importa si no se movio la bala)
-     *     <br></b>false</b> si el movimiento no se pudo por limites de movimiento o por que speed es menor igual que 0
+     * Moves alien while shooting downwards.
+     * @return True if the bullet was able to be moved according to speed and barriers limits.
      */
-    public boolean moveDownWithShoot() {
+    public boolean moveDownwardsShooting() {
 
         if (moveDown()) {
             if (getY() - getSpeed() == bullet.getY()) {
-                bullet.moveDownWithSpeed(getSpeed());//debe mover la bala no a la velocidad de la bala, sino a la velocidad del invasor
+                bullet.moveDownwards(getSpeed());//debe mover la bala no a la velocidad de la bala, sino a la velocidad del invasor
             }
             return true;
         } else {
             return false;
         }
     }
-    
-    
     
     /**
      * Dispara al tanque enemigo moviendo la bala un paso para abajo dependiendo su velocidad y fps, una vez ya en el aire detecta si choco o con el límite, o con el tanque.
@@ -113,117 +101,92 @@ public abstract class Alien extends ObjectShapes {
      *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
      * @see Invader/removeOrMoveShoot()
      */
+    
+    /**
+     * Alien shooting action.
+     * -1 bullet gets deleted because alien died.
+     * 0 bullet goes upwards.
+     * 1 bullet returns to alien.
+     * 2 bullet hit player's ship.
+     * @param enemy player ship that gets shot.
+     * @return an integer that represents if the bullet hits something.
+     */
     public int shoot(Ship enemy) {
-        /*
-        retorna 0 si el el diparo va normal}
-        retorna 1 cuando regresa el disparo al invasor normal
-        retora -1 elimina invasor
-         */
         try {
-           if (bullet.moveDownFast() == true) {//si la bala puede bajar
-             //_________________
-            if (enemy.collisionDetection(bullet.getShapes().get(0)) ) {//si detecta colisión con el tanque o si detecta colisión con un muro
-                // System.out.println("Hubo colision tanque");
-                 removeOrMoveShoot();//elimina el invasor si la bala no sigue, pero si bala sigue eliminia al invader cuando la bala colisione
-                return 1;//le dio a tanque
+           if (bullet.moveDownFast() == true) {
+                if (enemy.collisionDetection(bullet.getShapes().get(0)) ) {
+                    removeRestoreBullet();
+                    return 1;
+                }
+                return 0;
+            } else {
+                removeRestoreBullet();
+                return -1;
+            } 
+            } catch (Exception e) {
+                removeRestoreBullet();
+                return -1;
             }
-           
-            //_________________
-            return 0;//si el disparo sigue normal
-            
-        } else {//si no puede bajar, por tal llego al limite
-               removeOrMoveShoot();
-            return -1;//si llego al limite
-        } 
-        } catch (Exception e) {
-             removeOrMoveShoot();
-            return -1;
-        }
           
     }
  
-    //remover nave
     /**
-     * Si el invasor tiene alguna forma retorna la bala a la posicion de su invasor, si no elimina la bala y termina eliminando todo el invasor
-      * @return <b>int -1</b> si el disparo ya no tiene donde regresar por tal desaparece el disparo
-     *     <br></b>int 1</b> si la bala regresa a su nave invasora
+     * Deletes alien if it dies. Or returns bullet to its position.
+     * 0 remove alien shapes, he died.
+     * 1 return bullet to alien.
+     * @return integer that represents which condition happened.
      */
-    public int removeOrMoveShoot() {
+    public int removeRestoreBullet() {
         
-        if (getShapes().size() == 0) {//si no tiene forma el invasor, elimina todo de este invasor ya..
-            removeAllShape();
+        if (getShapes().size() == 0) {
+            removeShapes();
             return -1;
-        } else {//si el invasor tiene forma, retornalo a su forma inicial
-            bullet.setXComplete((int) ((getShapes().get(0).getWidth() / 2) + getShapes().get(0).getX() - 1));
-            bullet.setYComplete((int) getShapes().get(0).getY());
+        } else {
+            bullet.setAllShapesX((int) ((getShapes().get(0).getWidth() / 2) + getShapes().get(0).getX() - 1));
+            bullet.setAllShapesY((int) getShapes().get(0).getY());
             return 1;
         }
 
     }
     
-    public abstract void setSkin();
-    
     /**
-     * Forma de eliminar el invasor del juego, eliminado sus formas y dandolo por muerto (dead =true)
+     * Remove all alien shapes and its bullet when it dies.
      */
-    public void removeAllShape(){
-        removeShapes();
+    @Override
+    public void removeShapes(){
+        super.removeShapes();
         bullet.removeShapes();
         dead = true;
     }
+    
     /**
-     * En caso de que se quiera dar por muerta la nave pero no se quiera eliminr el disparo usar este metodo
+     * Remove all alien shapes ONLY when it dies.
      */
     public void removeOnlyShip(){
-        removeShapes();
+        super.removeShapes();
         dead = true;
     }
-
-    //------------------GetSetters----------------------------------------
     
     public ArrayList getBulletShape() {
         return bullet.getShapes();
     }
     
-    /**
-     * Obtener la clase de disparo del invasor
-     *
-     * @return Shoot(shoot)
-     */
     public Bullet getBullet() {
         return bullet;
     }
-    /**
-     * Determina el disparo de la clase Shoot
-     *
-     * @param bullet destinado a el invasor
-     */
+    
     public void setBullet(Bullet bullet) {
         this.bullet = bullet;
     }
-    /**
-     * Retorna si un invasor esta muerto o no
-     * @return <b>True</b> si la nave esta muerta
-     *     <br></b>false</b> si la nave no esta muerta
-     */
+    
     public boolean isDead() {
         return dead;
     }
-    /**
-     * Destina si el invasor esta muerto o no 
-     * @param dead boolean destinado al objeto
-     */
+    
     public void setDead(boolean dead) {
         this.dead = dead;
     }
     
-    //-------------------Override-----------------------------------------    
-    @Override
-    public String toString() {
-        return "\n---------Posicion-------------" + super.toString()
-                + bullet;
-    }
-
     /**
      * @return the bulletSpeed
      */
@@ -265,5 +228,4 @@ public abstract class Alien extends ObjectShapes {
     public void setAlienType(int alienType) {
         this.alienType = alienType;
     }
-
 }

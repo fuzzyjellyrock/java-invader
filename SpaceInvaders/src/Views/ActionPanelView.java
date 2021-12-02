@@ -8,8 +8,6 @@ package Views;
 
 import Controllers.FleetController;
 import Controllers.ShipController;
-import Models.Bullet;
-import Models.Ship;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -21,39 +19,56 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * interfaz sobrepuesta en la interfaz ViewGame en la que se ejecuta el juego
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * This is where the game is displayed.
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class ActionPanelView extends javax.swing.JPanel implements Runnable {
-
     /**
-     * Creates new form Game
+     * Controllers.
      */
+    //Alien fleet controller.
+    private FleetController fleetCon;
+    //Player Ship controller.
+    private ShipController shipCon;
     
-    //Controllers
-    private FleetController fleetCon;//invasores
-    private ShipController shipCon; //tanque
+    /**
+     * Thread method selector.
+     */
+    private int thread = 0;
     
-    //Views references
-    private ShipStatsPanelView shipStatsPanel; //barrera encargada de mostrar los consumibles
-    private GameWindowView gameWindow;  //forma de controlar el jframe
+    /**
+     *  Game refresh rate.
+     */
+    private int refreshRate = 800;
     
-    //Ship initalization.
-    final int xInitShip = 300;
-    final int yInitShip = 485;
-    int missile = 0;
-    
-    private int operation = 0;//Operacion de los hilos
-    private int refreshRate=800;//incremento de velocidad por ronda
-    
-    //Won or lost screen
+    /**
+     * Variables that control the Won or lost screen.
+     */
     boolean won = false;
     boolean lost = false;
     
-    //ActionPanel objects visibility.
+    /**
+     * Array in which each position controls the objects are displayed in the ActionPanel.
+     */
     private boolean[] visualElements = new boolean[4];
     
-//____________________________________________________________________
+    /**
+     * Ship initialization constants.
+     */
+    //Ship initial position.
+    final int xInitShip = 300;
+    final int yInitShip = 485;
+    //Missile active variable trigger.
+    int missile = 0;
+    
+    /**
+     * References to Views.
+     */
+    //Reference to ship status view for lives and missiles.
+    private ShipStatsPanelView shipStatsPanel;
+    //JFrame reference.
+    private GameWindowView gameWindow;
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -69,31 +84,38 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
- //-----------------Constructor---------------------------------------- 
     /**
-     * constructor de personajes y la parte visual
+     * Sets the initial view when the game is oppened.
      */
     public ActionPanelView() {
         initComponents();
-        lvl1();
-        setObjectsVisible();
-    }
-    /**
-     * permite hacer visible todo el juego
-     */
-    public void setObjectsVisible(){
-        visualElements[0] = true;//Show aliens.
-        visualElements[1] = true;//Show aliens's bullets.
-        visualElements[2] = true;//Show ship.
-        visualElements[3] = true;//Show ship's bullets.
+        startLevel1();
+        //Show aliens.
+        this.visualElements[0] = true;
+        //Show aliens's bullets.
+        this.visualElements[1] = true;
+        //Show ship.
+        this.visualElements[2] = true;
+        //Show ship's bullets.
+        this.visualElements[3] = true;
     }
     
+    /**
+     * Initialize the ShipController, and the Ship object for the selected level.
+     * 
+     * @param level level selected to play.
+     */
     public void initializeShip(int level){
         this.shipCon = new ShipController(this.xInitShip, this.yInitShip, 0);
         this.shipCon.createLifes(level);
         this.shipCon.createMissiles(level);
     }
     
+    /**
+     * Initialize the FleetController, and the Fleet object for the selected level.
+     * 
+     * @param level level selected to play.
+     */
     public void initializeFleet(int level){
         this.fleetCon = new FleetController(this.refreshRate);
         this.fleetCon.setRowsAndColumns(level);
@@ -103,155 +125,143 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     public void initializeBossFleet(int level){
         this.fleetCon = new FleetController(this.refreshRate-100);
         this.fleetCon.setRowsAndColumns(level);
-        this.fleetCon.addBoss(refreshRate/80);
+        this.fleetCon.addBoss(this.refreshRate/80);
     }
     
-    //Creación de niveles
     /**
-     * crea un nivel basico a partir de los parametros de los personajes
+     * Sets the game variables ann initializes characters for Level 1.
      */
-    public void lvl1(){
+    public void startLevel1(){
         this.won = false;
         this.lost = false;
         initializeFleet(1);
         initializeShip(1);
     }
+    
     /**
-     * crea un nivel basico a partir de los parametros de los personajes
+     * Sets the game variables ann initializes characters for Level 2.
      */
-    public void lvl2(){
-              //Creacion de personajes
+    public void startLevel2(){
         this.won = false;
         this.lost = false;
         initializeFleet(2);
         initializeShip(2);
     }
-    /**
-     * crea un nivel gefe (boss) a partir de los parametros de los personajes
-     */
-    public void lvl3(){
-              //Creacion de personajes
+    
+    public void startsLevel3(){
         this.won = false;
         this.lost = false;
         initializeBossFleet(3);
         initializeShip(3);
     }
 
-//------------------Methods-------------------------------------------
     /**
-     * Dispara la bala del tanque y lo repinta por movimiento
+     * Draws the ship's bullet and animates it.
+     * The variable shot 
      */
-    public void tankShoot() {
-        int shot = -1;
-        while (shot == -1) {//mientras el disparo pueda seguir sin problemas
-            
-            shot = shipCon.shoot(fleetCon.getFleet());
-           
-             if (shot == 1) {//esta parte le da un delay a la bala para que tarde en disparar cuando le de a un muro
-                 visualElements[3]=false;//permite que si la bala se queda en quieta el usuario no la vea hasta que retorne
-                 repaint();
-                 try {Thread.sleep(500);} catch (Exception e) {}//demora de bala retornando
-                shipCon.getShip().returnShoot();//retorna la bala    
+    //retorna -2 ya no hay naves
+        //retorna -1 si no paso nada 
+        //retorna  0 si choco con una nave
+        //retorna  1 si llego al limite
+    public void shootBulletShip() {
+        int hit = -1;
+        while (hit == -1) {
+            hit = this.shipCon.shoot(this.fleetCon.getFleet());
+            //If the ship's bullet hits an alien.
+            if (hit == 0) {
+                this.gameWindow.addPointsToPlayer(10);
+                this.gameWindow.showCurrentScore();
             }
-                  if (shot == 0) {
-                gameWindow.getPlayer().addPoints(10);
-                gameWindow.showCurrentScore();
-                
-            }
-                   if (shot == -2) {
-                gameWindow.callLvl();
+            //If no more aliens are alive, call a new level.
+            if (hit == -2) {
+                this.gameWindow.callLvl();
                 break;
             }
-        repaint();
-            visualElements[3]=true;
+            repaint();
         }
-       
-        
     }
+    
     /**
-     * dispara desde el tanque una bala que destruye todo y solo retorna al llegar al limite del mapa
+     * Ship launches a missile that stops when it reaches the ActionPanel height limit.
      */
-    public void tankSuperShoot() {
-        int disparo = -1;
-         if (shipCon.removeMissile()) {//solo si tiene disparos de sobra
-                shipStatsPanel.repaint();//eliminalo del la barra de consumibles
-            shipCon.createDestroyMissile(1);//genera la forma de la bala
-             while (disparo != 2) {//mientras el disparo pueda seguir sin problemas
-                 disparo = shipCon.launchMissile(fleetCon.getFleet());//mueve el disparo
-                
-                     if (disparo == 0) {
-                gameWindow.getPlayer().addPoints(10);
-                gameWindow.showCurrentScore();
-                
-                 }
-                if (disparo == -2) {
-                gameWindow.callLvl();   
-                break;
+    public void launchMissileShip() {
+        int hit = -1;
+        if (this.shipCon.removeMissile()) {
+            this.shipStatsPanel.repaint();
+            this.shipCon.createMissileForLaunch();
+            while (hit != 2) {
+                hit = this.shipCon.launchMissile(this.fleetCon.getFleet());
+                if (hit == 0) {
+                    this.gameWindow.addPointsToPlayer(10);
+                    this.gameWindow.showCurrentScore();
+                }
+                if (hit == -2) {
+                    this.gameWindow.callLvl();   
+                    hit = 2;
+                }
+                repaint();
             }
-                 repaint();
-             }
-           missile = 0;
-           repaint();
-          shipCon.getShip().createDestroyMissile(0);//regresa a la bala normal
-          shipCon.getShip().returnShoot();//retorna la bala al tanque
-
-         }
+            this.missile = 0;
+            repaint();
+            this.shipCon.removeMissileLaunched();
+            this.shipCon.reload();
+        }
     }
      
     /**
-     * Mueve los invasores de abajo, izquierda y derecha y por movimiento
+     * Initiates the fleet movement downwards.
      */
-    public void moveInvaders() {
-        while (fleetCon.moveGroupDown()) {
+    public void startFleetManeuvers() {
+        while (this.fleetCon.moveDownwards()) {
             repaint();
-//--------------------------------------------------------
-            while (fleetCon.moveGroupRight()) {
+            while (this.fleetCon.moveToTheRight()) {
                 repaint();    
-            }
-//--------------------------------------------------------            
-            fleetCon.moveGroupDown();
+            }          
+            this.fleetCon.moveDownwards();
             repaint();
-//--------------------------------------------------------
-            while (fleetCon.moveGroupLeft()) {
+            while (this.fleetCon.moveToTheLeft()) {
                 repaint();
             }
         }
-        
     }
+    
     /**
-     * permite que los invasores disparen aleatoriamente solo si estan vivos
+     * Controls events when the Fleet shoots and the Ship gets hit.
      */
-    public void alienShoots() {
-        //Posibilidad de disparo
-        int possibility = fleetCon.randomShoot();
-        //velocidad de disparo por segundo
-        try {Thread.sleep(100); } catch (Exception e) {}
-        if (possibility > -1 && (fleetCon.getAlienYCoord(possibility) == fleetCon.getAlienBulletYCoord(possibility))) {//si si existe la posibilidad y la bala se encuentra en el invasor
-            int aux = 0;//determina el camino del disparo
-            int auxLvl=gameWindow.getIncrementLvl();//determina si el tanque si ya paso de nivel, si es asi detiene la bala del invasor
-            while (aux == 0) {//mientras el disparo no colisione
-                aux = fleetCon.shootInvader(possibility, shipCon.getShip());//mueve la bala
+    public void fleetShoot() {
+        int possibility = this.fleetCon.randomizer();
+        
+        try {
+            Thread.sleep(150); 
+        } catch (InterruptedException e) {
+        }
+        
+        if (possibility > -1 && (this.fleetCon.getAlienYCoord(possibility) == this.fleetCon.getAlienBulletYCoord(possibility))) {
+            int playerGotHit = 0;
+            int playerLevel = this.gameWindow.getCurrentLevel();
+            while (playerGotHit == 0) {
+                playerGotHit = this.fleetCon.alienShoot(possibility, this.shipCon.getShip());
                 repaint(); 
-                if (auxLvl!=gameWindow.getIncrementLvl() && fleetCon.getAliensAlive() == 0) {//para la bala de el invasor al terminar el nivel
-                    break;
+                if (playerLevel != this.gameWindow.getCurrentLevel() && this.fleetCon.getAliensAlive() == 0) {
+                    playerGotHit = 1;
                 }
             }
           
-            if (aux == 1) {
-                shipStatsPanel.repaint();
-                if (shipCon.getLivesListSize()==0 && !lost) {//game over(si le da al tanque y no tiene vidas)
-                   dead();
+            if (playerGotHit == 1) {
+                this.shipStatsPanel.repaint();
+                if (this.shipCon.getLivesListSize() == 0 && !this.lost) {
+                    shipDestroyed();
                 }
             }
         }
     }
+    
     /**
-     * destina el game over de la partida usando el metodo / viewGame.stop()/dentro de ViewGame
+     * Signals the gameWindow to end the current game.
      */
-    public void dead(){
+    public void shipDestroyed(){
         gameWindow.endCurrentGame();
     }
-//------------------GetSetters----------------------------------------
     
     /**
      * Returns the value of whether an element is being displayed.
@@ -274,96 +284,111 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
     }
     
     /**
-     * resta la entrada de parametros a la tasa de refresco
-     * @param incrementRefreshRate puntos a restar
+     * Subtract the current refresh rate by an specific value.
+     * @param incrementRefreshRate the value that subtracts the refresh rate.
      */
-    public void setRestarRefreshRate(int incrementRefreshRate) {
+    public void subtractRefreshRate(int incrementRefreshRate) {
         this.refreshRate -= incrementRefreshRate;
     }
+    
     /**
-     * destina la tasa de refresco en el objeto
-     * @param incrementRefreshRate a destinar
+     * Set a new value for the refresh rate.
+     * @param refreshRate the new value for the refresh rate.
      */
-    public void setRefreshRate(int incrementRefreshRate) {
-        this.refreshRate = incrementRefreshRate;
+    public void setRefreshRate(int refreshRate) {
+        this.refreshRate = refreshRate;
     }
+    
     /**
-     * detina el jFrame de el objeto
-     * @param viewGame a destinar
+     * Set a reference of the game window JFrame inside this panel.
+     * @param gameWindow the GameWindowView JFrame to create the reference.
      */
-    public void setViewGame(GameWindowView viewGame) {
-        this.gameWindow = viewGame;
+    public void setGameWindow(GameWindowView gameWindow) {
+        this.gameWindow = gameWindow;
     }
+    
     /**
-     * destina los consumibles del tanque
-     * @param statusBar consumibles del tanque
+     * Set a reference of the status bar panel inside this panel.
+     * @param statusBar the ShipStatsPanelView Panel to create the reference.
      */
     public void setStatusBar(ShipStatsPanelView statusBar) {
         this.shipStatsPanel = statusBar;
     }
+    
     /**
-     * detina en el momento que tipo de disparo se esta ejecutando
-     * @return int (0) si es disparo normal int(1)si es super disparo
+     * Get the current ship ammo type.
+     * @return if missile value. If 1, then it is a missile.
      */
-    public int getTypeShoot() {
-        return missile;
+    public int getAmmoType() {
+        return this.missile;
     }
+    
     /**
-     * destian el tipo de disparo del tanque
-     * @param typeShoot destinado al disparo del tanque
+     * Set the current ship ammo type.
+     * @param ammoType the type of ammo. 1 is a missile, 0 is normal bullets.
      */
-    public void setTypeShoot(int typeShoot) {
-        this.missile = typeShoot;
+    public void setTypeShoot(int ammoType) {
+        this.missile = ammoType;
     }
+    
     /**
-     * retorna los invasores del objeto
-     * @return ControllerGroupOfInvaders( invasores)
+     * Get the FleetController inside this panel.
+     * @return FleetController
      */
-    public FleetController getInvasores() {
+    public FleetController getFleetController() {
         return fleetCon;
     }
+    
     /**
-     * destian los invasores del objeto
-     * @param invasores (ControllerGroupOfInvaders)
+     * Set the FleetController inside this panel.
+     * @param fleetCon FleetController
      */
-    public void setInvasores(FleetController invasores) {
-        this.fleetCon = invasores;
+    public void setFleetController(FleetController fleetCon) {
+        this.fleetCon = fleetCon;
     }
+    
     /**
-     * retorna el tanque del objeto
-     * @return ControllerTank(tanque)
+     * Get the ShipController inside this panel.
+     * @return ShipController
      */
-    public ShipController getTanque() {
+    public ShipController getShipController() {
         return shipCon;
     }
+    
     /**
-     * destian el tanque del objeto
-     * @param tanque (ControllerTank)
+     * Set the ShipController inside this panel.
+     * @param shipCon ShipController
      */
-    public void setTanque(ShipController tanque) {
-        this.shipCon = tanque;
+    public void setShipController(ShipController shipCon) {
+        this.shipCon = shipCon;
     }
    
     /**
-     * destina la operacion que ejecuta el hilo
-     * @param operation operacion desceada
+     * Sets the thread method to run.
+     * 0 controls ship movement to the left.
+     * 1 controls ship movement to the right.
+     * 2 controls ship shooting action.
+     * 3 controls fleet movement.
+     * 4 controls fleet shooting action.
+     
+     * @param thread the integer value that sets the thread methods to run.
      */
-    public void setOperation(int operation) {
-        this.operation = operation;
+    public void setThreadValue(int thread) {
+        this.thread = thread;
     }
     
-    public boolean isWon(){
-        return this.won;
-    }
-    
-    public boolean isLost(){
-        return this.lost;
-    }
-    
+    /**
+     * Sets the won value to trigger a screen message.
+     * @param won boolean value.
+     */
     public void setWon(boolean won){
         this.won = won;
     }
     
+    /**
+     * Sets the lost value to trigger a screen message.
+     * @param lost boolean value.
+     */
     public void setLost(boolean lost){
         this.lost = lost;
     }
@@ -385,12 +410,24 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
     
+    /**
+     * This methods renders the Rectangle2D ArrayList shapes inside an specific Graphics2D renderer.
+     * @param renderer where the shapes will be rendered.
+     * @param shapes an ArrayList of Rectangle2D objects.
+     * @param where a String of what object are we rendering.
+     */
     public void fillRenderer(Graphics2D renderer, ArrayList<Rectangle2D> shapes, String where){
         for(Rectangle2D current : shapes){
             renderer.fill(current);
         }
     }
     
+    /**
+     * Gets the Rectangle2D ArrayList of an alien and sends it to the fillRenderer() method.
+     * Gets the Rectangle2D ArrayList of an bullet and sends it to the fillRenderer() method.
+     * @param aliensRenderer a Graphics2D renderer.
+     * @param aliensBulletsRenderer a Graphics2D renderer.
+     */
     public void renderAliens(Graphics2D aliensRenderer, Graphics2D aliensBulletsRenderer){
         if (visualElements[0] == true) {
             aliensRenderer.setColor(this.fleetCon.getFleetColor());
@@ -409,6 +446,10 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
     
+    /**
+     * Gets the Rectangle2D ArrayList of an player ship and sends it to the fillRenderer() method.
+     * @param playerRenderer a Graphics2D renderer.
+     */
     public void renderPlayerShip(Graphics2D playerRenderer){
         if (visualElements[2] == true && !lost) {
             playerRenderer.setColor(this.shipCon.getShipColor());
@@ -416,6 +457,10 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
     
+    /**
+     * Gets the Rectangle2D ArrayList of an player ship bullets and sends it to the fillRenderer() method.
+     * @param bulletsRenderer a Graphics2D renderer.
+     */
     public void renderPlayerBullets(Graphics2D bulletsRenderer){
         if (visualElements[3] == true) {
             bulletsRenderer.setColor(this.shipCon.getShipColor());
@@ -426,6 +471,11 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
     
+    /**
+     * Renders a screen message of whether the player has won or lost.
+     * @param renderer a Graphics2D renderer.
+     * @throws InterruptedException for the thread that sleeps.
+     */
     public void textOnScreen(Graphics2D renderer) throws InterruptedException{
         renderer.setColor(Color.cyan);
         renderer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -440,8 +490,6 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         renderer.drawString(message,90,251); 
         Thread.sleep(3000);
     }
-    
-//-------------------Override-----------------------------------------
     
     @Override
     protected void paintComponent(Graphics g) {
@@ -465,48 +513,37 @@ public class ActionPanelView extends javax.swing.JPanel implements Runnable {
         }
     }
 
-     /**
-     * tipo de hilo a ejecutar
-     */
     @Override
     public void run() {
         
         boolean stop = false;
         while (!Thread.interrupted() && !stop) {
-            switch(this.operation) {
+            switch(this.thread) {
                 case 0:
-                    //movimiento de tanque
                     shipCon.moveLeftWithShoot();
                     repaint();
                     break;
                 case 1:
-                    //movimiento de tanque
                     shipCon.moveRightWithShoot();
                     repaint();
                     break;
                 case 2:
-                    //disparo del tanque
                     if (missile == 0) {
-                        tankShoot();
+                        shootBulletShip();
                     }else if (missile == 1) {
-                        tankSuperShoot();
+                        launchMissileShip();
                     }
                     break;
                 case 3:
-                    //movimiento de los invasores
-                    moveInvaders();
+                    startFleetManeuvers();
                     break;
                 case 4:
-                    //disparo invasores
                     while (!Thread.interrupted()) {
-                        alienShoots();
+                        fleetShoot();
                     }
                     break;
                 default:
-                {
                     System.out.println("Thread stopped early. ActionScreenView run() method has no valid argument to run code.");
-                }
-
             }
             stop = true;
         }

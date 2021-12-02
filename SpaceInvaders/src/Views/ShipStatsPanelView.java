@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class ShipStatsPanelView extends javax.swing.JPanel {
 
@@ -35,72 +35,87 @@ public class ShipStatsPanelView extends javax.swing.JPanel {
     ArrayList<Ship> lives;
     ArrayList<Bullet> missiles;
     
-    public ShipStatsPanelView() {
- 
-    }
-    public ShipStatsPanelView(ShipController ship){
+    public ShipStatsPanelView(){
         initComponents();
-        this.shipCon = ship;
         this.lives = new ArrayList<>();
         this.missiles = new ArrayList<>();
     }
-    
+
     /**
-     * retorna el tanque con sus consumibles 
-     * @return ControllerTank
+     * Sets ShipController for the status bar.
+     * @param ship ShipController
      */
-    public ShipController getTanque() {
-        return shipCon;
-    }
-    /**
-     * destina el tanque que sera usado en el objeto
-     * @param tanque a destinar
-     */
-    public void setTanque(ShipController tanque) {
-       this.shipCon = tanque;
+    public void setShipController(ShipController ship) {
+       this.shipCon = ship;
        repaint();
     }
     
+    /**
+     * Creates the shapes that represent the lives of the ship.
+     */
     public void createLiveShapes(){
-        this.lives.clear();
-        int currentX = xInitPostion-8;
-        //System.out.println("lives: "+this.shipCon.getLivesCount());
-        for (int i = 0; i < this.shipCon.getLivesCount(); i++) {//cantidad de vidas en forma de tanque
-            Ship ship = new Ship(currentX, yInitPosition);
-            currentX += itemSpaceSeparator + ship.getShapes().get(0).getWidth();
-            this.lives.add(ship);
+        if(this.lives != null && this.shipCon != null){
+            this.lives.clear();
+            int currentX = xInitPostion-8;
+            //System.out.println("lives: "+this.shipCon.getLivesCount());
+            for (int i = 0; i < this.shipCon.getLivesCount(); i++) {//cantidad de vidas en forma de tanque
+                Ship ship = new Ship(currentX, yInitPosition);
+                currentX += itemSpaceSeparator + ship.getShapes().get(0).getWidth();
+                this.lives.add(ship);
+            }
         }
         //System.out.println("lives list: "+this.lives.size());
     }
     
+    /**
+     * Creates the shapes that represent the missiles of the ship.
+     */
     public void createMissileShapes(){
-        this.missiles.clear();
-        int currentX = catSeparator+itemSpaceSeparator;
-        for (int i = 0; i < this.shipCon.getMissileCapacity(); i++) {
-            Bullet bullet = new Bullet(currentX, yInitPosition, 8 , 15);
-            bullet.addShape(currentX-7, yInitPosition+16, 20, 3);
-            currentX -= itemSpaceSeparator + bullet.getShapes().get(0).getWidth();
-            this.missiles.add(bullet);
+        if(this.missiles != null && this.shipCon != null){
+            this.missiles.clear();
+            int currentX = catSeparator+itemSpaceSeparator;
+            for (int i = 0; i < this.shipCon.getMissileCapacity(); i++) {
+                Bullet bullet = new Bullet(currentX, yInitPosition, 8 , 15);
+                bullet.addShape(currentX-7, yInitPosition+16, 20, 3);
+                currentX -= itemSpaceSeparator + bullet.getShapes().get(0).getWidth();
+                this.missiles.add(bullet);
+            }
         }
     }
     
+    /**
+     * This methods renders the Rectangle2D ArrayList shapes inside an specific Graphics2D renderer.
+     * @param renderer where the shapes will be rendered.
+     * @param shapes an ArrayList of Rectangle2D objects.
+     * @param where a String of what object are we rendering.
+     */
     public void fillRenderer(Graphics2D renderer, ArrayList<Rectangle2D> shapes){
         for(Rectangle2D current : shapes){
             renderer.fill(current);
         }
     }
     
+    /**
+     * Gets the Rectangle2D ArrayList of lives and sends it to the fillRenderer() method.
+     * @param renderer a Graphics2D renderer.
+     */
     public void renderPlayerLives(Graphics2D renderer){
-        createLiveShapes();
-        renderer.setColor(this.shipCon.getShipColor());
-        int n = 0;
-        for(Ship current : this.lives){
-            //System.out.println("lives: "+n+" | x: "+current.getX()+", y: "+current.getY());
-            fillRenderer(renderer, current.getShapes());
-            n++;
+        if(this.shipCon != null){
+            createLiveShapes();
+            renderer.setColor(this.shipCon.getShipColor());
+            int n = 0;
+            for(Ship current : this.lives){
+                //System.out.println("lives: "+n+" | x: "+current.getX()+", y: "+current.getY());
+                fillRenderer(renderer, current.getShapes());
+                n++;
+            }
         }
     }
     
+    /**
+     * Gets the Rectangle2D ArrayList of missiles and sends it to the fillRenderer() method.
+     * @param renderer a Graphics2D renderer.
+     */
     public void renderPlayerMissiles(Graphics2D renderer){
         createMissileShapes();
         renderer.setColor(Color.ORANGE);

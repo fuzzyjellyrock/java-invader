@@ -7,7 +7,7 @@ package Controllers;
 import Models.Player;
 /**
  *
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class PlayerController {
     private Player player;
@@ -19,7 +19,6 @@ public class PlayerController {
     public PlayerController(String name) {
         this.player = new Player(name);
     }
-//------------------Methods-------------------------------------------
     
     /**
      * Converts the current player level into a String and returns it.
@@ -28,6 +27,15 @@ public class PlayerController {
      */
     public String getPlayerLevel(){
         return String.valueOf(this.player.getLvl());
+    }
+    
+    /**
+     * Get current player level.
+     * 
+     * @return a integer with the player current level.
+     */
+    public int getPlayerLevelInt(){
+        return this.player.getLvl();
     }
     
     /**
@@ -40,27 +48,28 @@ public class PlayerController {
     }
     
     /**
-     * resetea los puntos del usuario(se usa cuando el usuario murio)
+     * Resets player points.
      */
     public void resetPoints(){
         player.resetPoints();
     }
 
     /**
-     * suma puntos al usuario 
-     * @param score puntos a sumar
-     * @return retorna los puntos actuales del usuario
+     * Add points to the player.
+     * @param points to add.
+     * @return player current score.
      */
-    public int addPoints(int score){
-       return player.scorePoints(score);
+    public int addPoints(int points){
+       return player.addPoints(points);
     }
+    
     /**
-     * suma niveles al usuario 
-     * @param lvl puntos a sumar
-     * @return retorna los niveles actuales del usuario
+     * Add a new level to the player.
+     * @param level
+     * @return player current level.
      */
-    public int addLevels(int lvl){
-       return player.addLevels(lvl);
+    public int addLevels(int level){
+       return player.addLevels(level);
     }
     
     /**
@@ -81,6 +90,4 @@ public class PlayerController {
     public String getPlayerName(){
         return this.player.getName();
     }
-
-    
 }

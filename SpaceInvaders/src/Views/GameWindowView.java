@@ -11,9 +11,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 /**
- * Este bloque es la interfaz principal del videojuego basado SpaceInvaders
  *
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class GameWindowView extends javax.swing.JFrame {
 
@@ -22,7 +21,7 @@ public class GameWindowView extends javax.swing.JFrame {
     private void initComponents() {
 
         game = new Views.ActionPanelView();
-        gameStatusBar = new Views.ShipStatsPanelView(game.getTanque());
+        gameStatusBar = new Views.ShipStatsPanelView();
         lblShields = new javax.swing.JLabel();
         lblMissiles = new javax.swing.JLabel();
         buttonNewGame = new javax.swing.JButton();
@@ -237,28 +236,26 @@ public class GameWindowView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-//-----------------Constructor---------------------------------------- 
-    //hilos
+    /**
+     * Threads
+     */
     private Thread aliens;
     private ArrayList<Thread> aliensBullets;
     private Thread shipBullets;
     private Thread moveShip;
 
-    //Leaderboard
+    /**
+     * Controllers
+     */
     LeaderboardController lbCon;
-    
-    //usuario
     private PlayerController playerCon;
     
-    //Game variables
+    /**
+     * Game variables.
+     */
     boolean moveAliens;
-    
-    //estado de game over
-    private int dead;
-
-    //nivel actaul al que pasa el usuario
-    private int round = 0;
+    private int deadStatus;
+    private int difficulty = 0;
     private int currentLevel = 0;
 
     public GameWindowView() {
@@ -275,7 +272,7 @@ public class GameWindowView extends javax.swing.JFrame {
         fillWindowElements();
         
         //Set game properties.
-        dead = 1;
+        deadStatus = 1;
         moveAliens = false;
         
         //Closing event calls.
@@ -302,9 +299,13 @@ public class GameWindowView extends javax.swing.JFrame {
         this.setTitle("Space Invaders");
         this.panelPlayerStats.setVisible(false);
         this.buttonNewGame.setVisible(false);
+        this.gameStatusBar.setVisible(false);
         this.game.setDoubleBuffered(true);
     }
     
+    /**
+     * Starts the game at level 1.
+     */
     public void startGame(){
         //nivel al que pasa
         currentLevel = 0;//elije el nivel
@@ -317,61 +318,45 @@ public class GameWindowView extends javax.swing.JFrame {
         showCurrentLevel();   
     }
     
-    //botones
     /**
-     * Dispara una "bala/superBala" o mueve el tanque a la derecha/izquierda
+     * Methods called when the player presses a button on the keyboard.
+     * Controls shooting and movement of the ship.
      *
-     * @param evt Evento del teclado para disparar desde el tanque o mover el
-     * mismo
      */
     private void gameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gameKeyPressed
-        /**
-         * VK_SPACE --> 32 • 37 – Para la fecha a la izquierda • 38 – Fecha
-         * hacia arriba • 39 – Flecha a la derecha • 40 – Fecha hacia abajo
-         *
-         */
-
-        if (dead == 0) {
+        if (deadStatus == 0) {
             moveShip = new Thread(game);
             switch (evt.getKeyCode()) {
-                //super bala (space)
                 case 32:
-                    tankShoot(1);
+                    shipShootAction(1);
                     break;
-                //bala flecha arriba
                 case 38:
-                    tankShoot(0);
+                    shipShootAction(0);
                     break;
-                //mover tanque izquierda
                 case 37:
-                    game.setOperation(0);
+                    game.setThreadValue(0);
                     moveShip.start();
                     break;
-                //mover tanque derecha
                 case 39:
-                    game.setOperation(1);
+                    game.setThreadValue(1);
                     moveShip.start();
                     break;
             }
         }
-
     }//GEN-LAST:event_gameKeyPressed
 
-    //reinicia el juego o lo activa
-    /**
-     * boton de inicio y reinicio del juego
-     * @param evt evento del boton
-     */
+    //Starts or restarts a new game.
     private void buttonNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
         game.setWon(false);
         game.setLost(false);
         if(!this.playerCon.getPlayerLevel().equals("0")){
             this.playerCon = new PlayerController(this.playerCon.getPlayerName());
         }
-        if (dead == 1){
+        if (deadStatus == 1){
             startGame();
             this.panelPlayerStats.setVisible(true);
         }
+        this.gameStatusBar.setVisible(true);
         buttonNewGame.setFocusable(false);
         buttonCreatePlayer.setFocusable(false);
         buttonShowLeaderboard.setFocusable(false);
@@ -389,7 +374,7 @@ public class GameWindowView extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonShowLeaderboardActionPerformed
 
     private void buttonCreatePlayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCreatePlayerActionPerformed
-        if (dead == 1){
+        if (deadStatus == 1){
             String name = "";
             if(playerCon != null){
                 name = playerCon.getPlayerName();
@@ -404,24 +389,24 @@ public class GameWindowView extends javax.swing.JFrame {
         buttonShowLeaderboard.setFocusable(false);
         game.setFocusable(true);
     }//GEN-LAST:event_buttonCreatePlayerActionPerformed
+    
     /**
-     * permite parar el juego y reiniciar los puntos del usuario(gameOver)
+     * Ends current game and saves the player object to the Leaderboard.
      */
     public void endCurrentGame() {
-        dead = 1;//game over
+        deadStatus = 1;
         game.setLost(true);
-        //resetea al usuario y lo hubica en el ranking
-        if (game.getTanque().getShip().getY()!=game.getTanque().getShip().getBullet().getY()) {
+        if (game.getShipController().getShip().getY()!=game.getShipController().getShip().getBullet().getY()) {
             shipBullets.interrupt();
         }
         this.lbCon.addNewScore(playerCon.getPlayer());
         playerCon.resetPoints();
         showHighScore();
-        //para hilos
         stopThread();
     }
+    
     /**
-     * para los hilos de diparo, para que se activen cuando sea nescesario
+     * Stops active threads.
      */
     public void stopThread() {
         for (Thread current : aliensBullets) {
@@ -439,92 +424,87 @@ public class GameWindowView extends javax.swing.JFrame {
     }
     
     /**
-     * dependiendo la ronda activa un nivel del juego, y activa al jugador
+     * Starts a new level depending on the Player level.
      */
     public void callLvl() {
-        //incremeta los niveles
         currentLevel++;
-          playerCon.addLevels(1);
+        playerCon.addLevels(1);
           
-          //si el usurio paso de nivel y mato todas las naves
-        if (playerCon.getPlayer().getLvl() != 1 ||  dead == 0) {//apaga las acciones si paso de nivel
+        if (playerCon.getPlayerLevelInt() != 1 ||  deadStatus == 0) {
             playerCon.addPoints(20);
             game.setWon(true);
             stopThread();
-        }else{//activar primer nivel
+        }else {
             game.setRefreshRate(800);
-            round=0;
+            difficulty = 0;
         }
-        //mostrar los datos 
-          showCurrentLevel();
-          showHighScore();
+        showCurrentLevel();
+        showHighScore();
           
-        dead = 0;//activa al jugador
+        deadStatus = 0;
            
-        //dependiendo en el nivel que este, selecciona el proximo nivel 
         if (currentLevel == 1) {
-            game.lvl1();
+            game.startLevel1();
         } else if (currentLevel == 2) {
-            game.lvl2();
+            game.startLevel2();
         } else if (currentLevel == 3) {
-            game.lvl3();
-          
+            game.startsLevel3();
         }
         
-        round++;//suma la rondas para que el juego sea un bucle cada vez mas dificil
-        if (round == 3) {// si la ronda es 3 regresa al nivel 1 pero mas rapido
-            game.setRestarRefreshRate(100);
-            round = 0;
+        difficulty++;
+        
+        if (difficulty == 3) {// si la ronda es 3 regresa al nivel 1 pero mas rapido
+            game.subtractRefreshRate(100);
+            difficulty = 0;
         }
         game.repaint();
 
-       //recreamos el gameBar
-        gameStatusBar.setTanque(game.getTanque());
+        gameStatusBar.setShipController(game.getShipController());
         gameStatusBar.repaint();
         game.setStatusBar(gameStatusBar);
-        game.setViewGame(this);
+        game.setGameWindow(this);
         
-        //dependiendo el nivel activa unos hilos diferentes
         if (currentLevel != 3) {
-            activateInvaders(1);
-        } else {//este hilo es el jefe por tal dispara 3 veces
-            activateInvaders(3);
-              currentLevel=0;
+            createFleetThread(1);
+        } else {
+            createFleetThread(3);
+            currentLevel = 0;
         }
 
      
     }
+    
     /**
-     * activa los hilos de movimiento de los invasores y sus disparos.Este metodo ademas tiene de entrada la cantidad de hilos de disparos que sse queiren activar
-     * @param invadersShoots cnatidad de disparos de los invasores a la vez
+     * Creates the fleet thread with the fleet shooting rate.
+     * @param invadersShoots fleet shooting rate.
      */
-    public void activateInvaders(int invadersShoots) {
-       invadersShoot(invadersShoots);
-        try {Thread.sleep(200);} catch (Exception e) {}//tiempo de espera
+    public void createFleetThread(int invadersShoots) {
+        fleetShootingRate(invadersShoots);
+        try {Thread.sleep(200);
+        } catch (InterruptedException e) {
+        }
         invadersrMove();
-
     }
 
-    //juego hilos
     /**
-     * Método encargado de generar un disparo desde el tanque
+     * Triggers the shooting animation.
+     * @param type type of ammo.
      */
-    public void tankShoot(int type) { 
+    public void shipShootAction(int type) { 
         shipBullets = new Thread(game);
-        if (game.getTanque().getShip().getBullet().getY() == game.getTanque().getShip().getY()) {//solo dispara si el disparo ya esta en el tanque
-            game.setOperation(2);
+        if (game.getShipController().getShipBulletYCoord() == game.getShipController().getShipYCoord()) {
+            game.setThreadValue(2);
             game.setTypeShoot(type);
             shipBullets.start();
         }
     }
+    
     /**
-     * dependiendo los hilos que quieras este metodo permite activar los
-     * disparos de los invasores
-     *
-     * @param size cantidad de disparos por ronda de los invasores
+     * Starts fleet shooting action with the number of threads desired.
+     * @param size number of threads
      */
-    public void invadersShoot(int size) {
-        game.setOperation(4);
+    public void fleetShootingRate(int size) {
+        game.setThreadValue(4);
         aliensBullets = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             aliensBullets.add(new Thread(game));
@@ -534,13 +514,11 @@ public class GameWindowView extends javax.swing.JFrame {
     }
     
     /**
-     * Método encargado de mover los invasores en grupo
+     * Animate fleet motion.
      */
     public void invadersrMove() {
-       
-        game.setOperation(3);
+        game.setThreadValue(3);
         aliens = new Thread(game);
-        //System.out.println("moveAliens: "+moveAliens);
         if (moveAliens == false) {
             aliens.start();
             moveAliens = true;
@@ -569,9 +547,16 @@ public class GameWindowView extends javax.swing.JFrame {
         lblCurrentScore.setText(this.playerCon.getPlayerScore());
     }
     
-//------------------GetSetters----------------------------------------
+    /**
+     * Add points to Player.
+     * @param points integer value with the number of new points.
+     */
+    public void addPointsToPlayer(int points){
+        this.playerCon.addPoints(points);
+    }
+    
     public int getRound() {
-        return round;
+        return difficulty;
     }
     public PlayerController getPlayer() {
         return playerCon;
@@ -580,17 +565,21 @@ public class GameWindowView extends javax.swing.JFrame {
         this.setPlayerCon(player);
     }
     public int getDead() {
-        return dead;
+        return deadStatus;
     }
-    public int getIncrementLvl() {
+    public int getCurrentLevel() {
         return currentLevel;
     }
     public void setIncrementLvl(int incrementLvl) {
         this.currentLevel += incrementLvl;
     }
     
-
-//_________________________________main________________________________-
+    /**
+     * @param playerCon the playerCon to set
+     */
+    public void setPlayerCon(PlayerController playerCon) {
+        this.playerCon = playerCon;
+    }
 
     /**
      * @param args the command line arguments
@@ -651,14 +640,6 @@ public class GameWindowView extends javax.swing.JFrame {
     private javax.swing.JLabel lblWindowTitle;
     private javax.swing.JPanel panelPlayerStats;
     // End of variables declaration//GEN-END:variables
-
-    /**
-     * @param playerCon the playerCon to set
-     */
-    public void setPlayerCon(PlayerController playerCon) {
-        this.playerCon = playerCon;
-    }
-
 
 }
 //_____________________________________________________________________-

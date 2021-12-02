@@ -13,117 +13,96 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 /**
- * Controlador para el grupo de invasores
- * @author Juan Camilo Muños, Luis Miguel Sanchez Pinilla
+ * 
+ * @author Juan Camilo Muñoz, Luis Miguel Sanchez Pinilla
  */
 public class FleetController {
 
     private Fleet fleet;
-
-    //-----------------Constructor----------------------------------------
-    /**
-     * constructor de GroupInvaders null
-     */
+    
     public FleetController() {
         this.fleet = new Fleet();
     }
-    /**
-     * constructor GroupInvaders Con parametro
-     *
-     * @param xInicial posicion de inicial x del grupo (conde se pondra la
-     * primera nave y todas partiran de hay)
-     * @param yInicial posicion de inicial y del grupo (conde se pondra la
-     * primera nave y todas partiran de hay)
-     * @param row filas de invasores que se encontra en el grupo
-     * @param column columnas de invasores que se encontra en el grupo
-     * @param refreshRateInvaders fps del grupo
-     */
-    public FleetController(int refreshRateInvaders) {
-        this.fleet = new Fleet(refreshRateInvaders);
+    
+    public FleetController(int fleetRefreshRate) {
+        this.fleet = new Fleet(fleetRefreshRate);
     }
-    //------------------Methods------------------------------------------  
-
+    
+    /**
+     * Sets the size of the fleet according to the player level.
+     * @param level player level.
+     */
     public void setRowsAndColumns(int level){
         this.fleet.setRowsAndColumns(level);
     }
     
+    /**
+     * Add the boss and other enemies to the scene.
+     * @param refreshRate 
+     */
     public void addBoss(long refreshRate){
         this.fleet.addBoss(refreshRate);
     }
     
     /**
-     * mueve las naves gunto con sus disparos a la izquierda dependiendo su
-     * velocidad
+     * Move fleet to the left.
+     * @return if fleet moved.
      */
-    public boolean moveGroupLeft() {
+    public boolean moveToTheLeft() {
         return fleet.moveGroupLeft();
 
     }
+    
     /**
-     * mueve las naves gunto con sus disparos a la derecha dependiendo su
-     * velocidad
+     * Move fleet to the right.
+     * @return if fleet moved.
      */
-    public boolean moveGroupRight() {
-        return fleet.moveGroupRight();
+    public boolean moveToTheRight() {
+        return fleet.moveFleetRight();
 
     }
+    
     /**
-     * mueve las naves gunto con sus disparos a para abajo de una manera unifome
+     * Move fleet downwards.
+     * @return if fleet moved.
      */
-    public boolean moveGroupDown() {
-        return fleet.moveGroupDown();
+    public boolean moveDownwards() {
+        return fleet.moveFleetDown();
 
     }
+    
     /**
-   * Crea el grupo de invasores dado un tamaño parecido a una matriz, es decir
-     * si se ingresa una fila y columna (ejem: 2*2 ) se crearan 4 invasores.
-     * Otro ejemplo seria una fila y columna (ejem: 3*3) genera 9 invasores
- * @param widthInvader ancho de los invasores
- * @param heightInvader alto de los invasores
- * @param spaceBetweenInvaders espacio entre los invasores
- * @param speedBullet velocidad de la bala de los invasores
- * @param refreshBullet tasa de refresco de las balas
- */
+     * Creates fleet aliens.
+     * @param refreshBullet aliens refresh rate.
+     */
     public void addGroupInvader(int refreshBullet) {
         fleet.createAliens(refreshBullet);
     }
     
-    //--------------------------------------
-    
     /**
-     * determina cuando quedan menos invasore que velocidad tendran los invasores, solo se activa si el tanque le dio a un invasor
+     * Sets the velocity of the fleet as they die.
      */
     public void controlOfRefreshRate(){
         fleet.refreshRateControl();
     }
+    
     /**
-     * dispara aleatoriamente una bala de los invasores
-     *
-     * @param enemy tanque enemigo al cual le puede afectar
+     * Gets a randomized value of the alien that could die.
+     * @return enemy index that could die.
      */
-    public int randomShoot() {
-        return fleet.randomShots();
+    public int randomizer() {
+        return fleet.randomizer();
     }
+    
     /**
-     * a partir de un index(invader) determina que invasor disparara
-     * @param invader que va a disparar
-     * @param tank tanque al cual la bala le puede hacer daño
-     * @return <b>int 0</b> si el disparo puede seguir para adelante sin problema
-     *     <br></b>int 1</b> si la bala regresa a su nave invasora
-     *     <br></b>int 2</b> si la bala regresa a y le dio al tanque
-     *     <br></b>int -1</b> si se elimino el invasor, por tal se elimino el invasor 
-     * @see model.GroupOfInvaders/shoot()
+     * Gets the index of the alien that will shoot next.
+     * @param alienIndex
+     * @param ship
+     * @return index of the alien that will shoot next
      */
-    public int shootInvader(int invader, Ship tank) {
-        return fleet.getInvaders().get(invader).shoot(tank);
+    public int alienShoot(int alienIndex, Ship ship) {
+        return fleet.getInvaders().get(alienIndex).shoot(ship);
     }
-
-    //------------------GetSetters---------------------------------------
-    /**
-     * obtener el grupo de invasores que usa el objeto
-     *
-     * @return groupInvader(groupOfInvaders)
-     */
     
     public int getAliensListSize(){
         return this.fleet.getAliensListSize();
@@ -148,19 +127,11 @@ public class FleetController {
     public Fleet getFleet() {
         return fleet;
     }
-    /**
-     * determina el grupo de invasores que usa el objeto
-     *
-     * @param groupInvader destinado a la clase
-     */
+    
     public void setGroupInvader(Fleet groupInvader) {
         this.fleet = groupInvader;
     }
-    /**
-     * retorna un invasor dentro de groupOfInvaders dependiendo su index
-     * @param alienIndex idex a buscar
-     * @return Invader (model/Invader) invasor el cual se busca
-     */
+    
     public Alien getAlien(int alienIndex) {
         return fleet.getInvaders().get(alienIndex);
     }
@@ -176,12 +147,4 @@ public class FleetController {
     public int getAliensAlive() {
         return fleet.getAliensAlive();
     }
-    
-    //-------------------Override-----------------------------------------
-
-    @Override
-    public String toString() {
-        return "" + fleet; //To change body of generated methods, choose Tools | Templates.
-    }
-
 }
